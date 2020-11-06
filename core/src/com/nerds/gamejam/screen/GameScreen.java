@@ -3,11 +3,11 @@ package com.nerds.gamejam.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.nerds.gamejam.GameJam;
-import com.nerds.gamejam.actor.ScrollingBackground;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -23,10 +23,10 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        ScrollingBackground scrollingBackground = new ScrollingBackground(new Texture("stars.png"));
-        scrollingBackground.setSpeed(1f);
-
-        stage.addActor(scrollingBackground);
+        Table table = new Table();
+        table.add(new Label("Hello there!", skin)).expand();
+        table.setFillParent(true);
+        stage.addActor(table);
     }
 
     @Override
