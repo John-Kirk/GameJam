@@ -3,13 +3,16 @@ package com.nerds.gamejam.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.actor.ScrollingBackground;
 
 public class StartScreen extends ScreenAdapter {
 
@@ -40,10 +43,17 @@ public class StartScreen extends ScreenAdapter {
         table.add().expand();
         table.row();
         addPaddingRow(table, 3);
-
         table.setFillParent(true);
-//        table.debug();
-        stage.addActor(table);
+
+        ScrollingBackground scrollingBackground = new ScrollingBackground(new Texture("stars.png"));
+        scrollingBackground.setSpeed(1f);
+
+        Stack stack = new Stack();
+        stack.add(scrollingBackground);
+        stack.add(table);
+        stack.setFillParent(true);
+
+        stage.addActor(stack);
     }
 
     private void addPaddingRow(Table table, int columns) {
