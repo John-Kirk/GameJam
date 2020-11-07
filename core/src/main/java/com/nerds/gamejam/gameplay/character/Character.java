@@ -5,8 +5,8 @@ import com.nerds.gamejam.translation.GameStrings;
 
 public class Character {
 
-    private int totalHp;
-    private int currentHp;
+    private float totalHp;
+    private float currentHp;
     private int strength;
     private int dexterity;
     private int constitution;
@@ -22,7 +22,7 @@ public class Character {
     }
 
     public String getCurrentHpDescription() {
-        int hpPercentage = ((currentHp/totalHp) * 100);
+        int hpPercentage = (int) ((currentHp/totalHp) * 100);
         if (hpPercentage > 89) {
             return strings.get("healthyStatus");
         } else if (hpPercentage > 65) {
@@ -35,5 +35,21 @@ public class Character {
             return strings.get("nearDeathStatus");
         }
         return strings.get("deadStatus");
+    }
+
+    public float getTotalHp() {
+        return this.totalHp;
+    }
+
+    public void setTotalHp(int totalHp) {
+        this.totalHp = totalHp;
+    }
+
+    public float getCurrentHp() {
+        return this.currentHp;
+    }
+
+    public void setCurrentHp(int currentHp) {
+        this.currentHp = currentHp;
     }
 }
