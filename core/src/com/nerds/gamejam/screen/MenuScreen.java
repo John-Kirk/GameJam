@@ -1,5 +1,6 @@
 package com.nerds.gamejam.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
@@ -11,43 +12,32 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
 
-public class GameScreen extends ScreenAdapter {
+public class MenuScreen extends ScreenAdapter {
 
     private final GameJam game;
     private final Stage stage;
     private final Skin skin;
-    private final Screen menuScreen;
+    private final Screen gameScreen;
 
-    public GameScreen(GameJam game, Stage stage, Skin skin) {
+    public MenuScreen(GameJam game, Stage stage, Skin skin, Screen gameScreen) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
-        this.menuScreen = new MenuScreen(game, stage, skin, this);
+        this.gameScreen = gameScreen;
     }
 
     @Override
     public void show() {
-        stage.addActor(createPauseButton());
-
         Table table = new Table();
-        table.add(new Label("Hello there!", skin)).expand();
-        table.setFillParent(true);
-        stage.addActor(table);
-    }
-
-    private Button createPauseButton() {
-        Button button = new TextButton("||", skin);
-        button.setPosition(
-                Gdx.graphics.getWidth() - button.getWidth() - 10,
-                Gdx.graphics.getHeight() - button.getHeight() - 10
-        );
-        button.addListener(new ClickListener() {
+        Button resume = new TextButton("Resume", skin);
+        resume.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(menuScreen);
+                game.setScreen(gameScreen);
             }
         });
-        return button;
+        table.addActor(resume);
+        stage.addActor(table);
     }
 
     @Override
