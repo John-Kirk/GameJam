@@ -65,6 +65,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void hide() {
         stage.getActors().forEach(Actor::remove);
+        stage.clear();
     }
 
     @Override

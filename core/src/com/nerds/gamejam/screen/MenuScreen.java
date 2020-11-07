@@ -1,6 +1,5 @@
 package com.nerds.gamejam.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
@@ -55,6 +54,7 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void hide() {
         stage.getActors().forEach(Actor::remove);
+        stage.clear();
     }
 
     @Override
