@@ -23,7 +23,7 @@ public class PlanetRenderer {
         spriteBatch.draw(base, x, y, width, height);
         spriteBatch.setColor(planet.getSecondaryMaterial().getColor());
         spriteBatch.draw(new Texture(planet.getLandmass().getFileName()), x, y, width, height);
-        spriteBatch.setColor(0, 0, 0, 0.5f);
+        spriteBatch.setColor(0, 0, 0, 0.3f);
         spriteBatch.draw(shadow, x, y, width, height);
     }
 }

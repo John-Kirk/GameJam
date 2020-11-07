@@ -12,7 +12,10 @@ public class PlanetFactory {
 
     public Planet createPlanet() {
         Material baseMaterial = randomEnum(Material.class);
-        Material secondaryMaterial = randomEnum(Material.class);
+        Material secondaryMaterial = null;
+        while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
+            secondaryMaterial = randomEnum(Material.class);
+        }
         Landmass landmass = randomEnum(Landmass.class);
 
         return new Planet(baseMaterial, secondaryMaterial, landmass);
