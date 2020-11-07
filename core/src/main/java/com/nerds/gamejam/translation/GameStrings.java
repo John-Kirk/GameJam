@@ -6,18 +6,14 @@ import com.badlogic.gdx.utils.I18NBundle;
 
 public class GameStrings {
 
-    private static GameStrings gameStrings;
-    private static I18NBundle translationBundle;
+    private I18NBundle translationBundle;
 
-    private GameStrings() {
+    public GameStrings() {
         FileHandle baseFileHandle = Gdx.files.internal("i18n/translationStrings");
         translationBundle = I18NBundle.createBundle(baseFileHandle);
     }
 
-    public static I18NBundle getInstance() {
-        if (gameStrings == null) {
-            gameStrings = new GameStrings();
-        }
-        return translationBundle;
+    public String get(String key) {
+        return translationBundle.get(key);
     }
 }
