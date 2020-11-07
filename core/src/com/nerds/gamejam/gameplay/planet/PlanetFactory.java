@@ -18,7 +18,9 @@ public class PlanetFactory {
         }
         Landmass landmass = randomEnum(Landmass.class);
 
-        return new Planet(baseMaterial, secondaryMaterial, landmass);
+        float planetScale = random.nextFloat()+0.5f;
+
+        return new Planet(baseMaterial, secondaryMaterial, landmass, planetScale);
     }
 
     public <T extends Enum<?>> T randomEnum(Class<T> clazz){

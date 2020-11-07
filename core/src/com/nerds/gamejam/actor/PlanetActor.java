@@ -26,8 +26,8 @@ public class PlanetActor extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         float x = getX();
         float y = getY();
-        float width = getWidth();
-        float height = getHeight();
+        float width = getWidth() * planet.getScale();
+        float height = getHeight() * planet.getScale();
 
         batch.setColor(Color.BLACK);
         batch.draw(outline, x, y, width, height);
