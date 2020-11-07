@@ -16,6 +16,8 @@ public class PlanetActor extends Actor {
 
     public PlanetActor(Planet planet) {
         this.planet = planet;
+        this.setWidth(128);
+        this.setHeight(128);
     }
 
     public void setPlanet(Planet planet) {
