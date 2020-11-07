@@ -1,6 +1,5 @@
 package com.nerds.gamejam.gameplay.character;
 
-import com.badlogic.gdx.utils.I18NBundle;
 import com.nerds.gamejam.translation.GameStrings;
 
 public class Character {
@@ -13,10 +12,10 @@ public class Character {
     private int intelligence;
     private int wisdom;
     private int charisma;
-    private I18NBundle strings;
+    private GameStrings strings;
 
-    public Character() {
-        strings = GameStrings.getInstance();
+    public Character(GameStrings strings) {
+        this.strings = strings;
         totalHp = 20;
         currentHp = 20;
     }

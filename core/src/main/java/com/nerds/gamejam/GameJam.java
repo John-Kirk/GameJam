@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.nerds.gamejam.screen.GameScreen;
 import com.nerds.gamejam.screen.StartScreen;
+import com.nerds.gamejam.translation.GameStrings;
 import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.PicoContainer;
 import org.picocontainer.injectors.ConstructorInjection;
 
 public class GameJam extends Game {
@@ -23,7 +23,8 @@ public class GameJam extends Game {
 			.addComponent(new Skin(fileHandle))
 			.addComponent(this)
 			.addComponent(StartScreen.class)
-			.addComponent(GameScreen.class);
+			.addComponent(GameScreen.class)
+			.addComponent(GameStrings.class);
 
 		Gdx.input.setInputProcessor(picoContainer.getComponent(Stage.class));
 		setScreen(picoContainer.getComponent(StartScreen.class));
