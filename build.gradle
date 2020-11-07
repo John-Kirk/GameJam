@@ -52,8 +52,8 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
-        
+        api "org.picocontainer:picocontainer:2.15"
+
         testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
