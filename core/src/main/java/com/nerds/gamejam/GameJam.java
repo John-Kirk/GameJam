@@ -6,15 +6,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.nerds.gamejam.screen.GameScreen;
 import com.nerds.gamejam.screen.StartScreen;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.PicoContainer;
+import org.picocontainer.injectors.ConstructorInjection;
 
 public class GameJam extends Game {
 	
 	@Override
 	public void create () {
 		FileHandle fileHandle = Gdx.files.getFileHandle("testskin/assets/uiskin.json", Files.FileType.Internal);
-		Stage stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
-		setScreen(new StartScreen(this, stage, new Skin(fileHandle)));
+
+		DefaultPicoContainer picoContainer = new DefaultPicoContainer(new ConstructorInjection());
+		picoContainer.addComponent(new Stage())
+			.addComponent(new Skin(fileHandle))
+			.addComponent(this)
+			.addComponent(StartScreen.class)
+			.addComponent(GameScreen.class);
+
+		Gdx.input.setInputProcessor(picoContainer.getComponent(Stage.class));
+		setScreen(picoContainer.getComponent(StartScreen.class));
 	}
 }
