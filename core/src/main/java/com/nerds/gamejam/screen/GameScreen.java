@@ -23,10 +23,10 @@ public class GameScreen extends ScreenAdapter {
         this.stage = stage;
         this.skin = skin;
         this.menuScreen = new MenuScreen(game, stage, skin, this);
+        initialise();
     }
 
-    @Override
-    public void show() {
+    private void initialise() {
         stage.addActor(createPauseButton());
 
         Table table = new Table();
@@ -63,13 +63,9 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void hide() {
+    public void dispose() {
         stage.getActors().forEach(Actor::remove);
         stage.clear();
-    }
-
-    @Override
-    public void dispose() {
         this.game.dispose();
         this.stage.dispose();
         this.skin.dispose();
