@@ -16,8 +16,31 @@ public class PlanetActor extends Actor {
 
     public PlanetActor(Planet planet) {
         this.planet = planet;
+        this.setScale(planet.getScale());
         this.setWidth(128);
         this.setHeight(128);
+    }
+
+    @Override
+    public float getWidth() {
+        return super.getWidth() * getScaleX();
+    }
+
+    @Override
+    public float getHeight() {
+        return super.getHeight() * getScaleY();
+    }
+
+    @Override
+    public float getX() {
+        float delta = super.getWidth() - this.getWidth();
+        return super.getX() + delta/2;
+    }
+
+    @Override
+    public float getY() {
+        float delta = super.getHeight() - this.getHeight();
+        return super.getY() + delta/2;
     }
 
     public void setPlanet(Planet planet) {
@@ -26,26 +49,19 @@ public class PlanetActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        float scale = planet.getScale();
         float width = getWidth();
         float height = getHeight();
 
-        float scaledWidth = width * scale;
-        float scaledHeight = height * scale;
-
-        float deltaX = width - scaledWidth;
-        float deltaY = height - scaledWidth;
-
-        float x = getX() + deltaX/2;
-        float y = getY() + deltaY/2;
+        float x = getX();
+        float y = getY();
 
         batch.setColor(Color.BLACK);
-        batch.draw(outline, x, y, scaledWidth, scaledHeight);
+        batch.draw(outline, x, y, width, height);
         batch.setColor(planet.getBaseMaterial().getColor());
-        batch.draw(base, x, y, scaledWidth, scaledHeight);
+        batch.draw(base, x, y, width, height);
         batch.setColor(planet.getSecondaryMaterial().getColor());
-        batch.draw(new Texture(planet.getLandmass().getFileName()), x, y, scaledWidth, scaledHeight);
+        batch.draw(new Texture(planet.getLandmass().getFileName()), x, y, width, height);
         batch.setColor(0, 0, 0, 0.3f);
-        batch.draw(shadow, x, y, scaledWidth, scaledHeight);
+        batch.draw(shadow, x, y, width, height);
     }
 }
