@@ -1,7 +1,8 @@
-package com.nerds.gamejam;
+package com.nerds.gamejam.gameplay.planet;
 
 import com.badlogic.gdx.Gdx;
 import com.github.chaosfirebolt.converter.RomanInteger;
+import com.nerds.gamejam.util.RandomSeed;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +26,7 @@ public class PlanetNameFactory {
 
     private List<String> readStringsFromFile(String filename) {
         try {
-            return Files.readAllLines(Gdx.files.internal("planet-naming/" + filename + ".txt").file().toPath());
+            return Files.readAllLines(Gdx.files.internal("planet/naming/" + filename + ".txt").file().toPath());
         } catch (IOException e) {
             e.printStackTrace();
             return null;

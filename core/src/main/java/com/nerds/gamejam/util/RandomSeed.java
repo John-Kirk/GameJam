@@ -1,4 +1,4 @@
-package com.nerds.gamejam;
+package com.nerds.gamejam.util;
 
 import java.util.Random;
 

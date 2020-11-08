@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
-import com.nerds.gamejam.RandomSeed;
+import com.nerds.gamejam.util.RandomSeed;
 import com.nerds.gamejam.actor.ScrollingBackground;
 
 public class StartScreen extends ScreenAdapter {
