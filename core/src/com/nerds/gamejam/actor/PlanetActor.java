@@ -18,6 +18,13 @@ public class PlanetActor extends Actor {
         this.planet = planet;
         this.setWidth(128);
         this.setHeight(128);
+        this.setScale(planet.getScale());
+    }
+
+    @Override
+    protected void scaleChanged() {
+        this.setWidth(getWidth() * getScaleX());
+        this.setHeight(getHeight() * getScaleY());
     }
 
     public void setPlanet(Planet planet) {
@@ -26,10 +33,11 @@ public class PlanetActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        float x = getX();
-        float y = getY();
         float width = getWidth();
         float height = getHeight();
+
+        float x = getX();
+        float y = getY();
 
         batch.setColor(Color.BLACK);
         batch.draw(outline, x, y, width, height);
