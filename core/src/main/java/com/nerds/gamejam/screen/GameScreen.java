@@ -17,6 +17,7 @@ public class GameScreen extends ScreenAdapter {
     private final Stage stage;
     private final Skin skin;
     private final Screen menuScreen;
+    private Table table;
 
     public GameScreen(GameJam game, Stage stage, Skin skin) {
         this.game = game;
@@ -27,11 +28,15 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void initialise() {
-        stage.addActor(createPauseButton());
 
-        Table table = new Table();
+        table = new Table();
         table.add(new Label("Hello there!", skin)).expand();
         table.setFillParent(true);
+    }
+
+    @Override
+    public void show() {
+        stage.addActor(createPauseButton());
         stage.addActor(table);
     }
 
@@ -63,9 +68,13 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void dispose() {
+    public void hide() {
         stage.getActors().forEach(Actor::remove);
         stage.clear();
+    }
+
+    @Override
+    public void dispose() {
         this.game.dispose();
         this.stage.dispose();
         this.skin.dispose();
