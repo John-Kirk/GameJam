@@ -3,8 +3,7 @@ package com.nerds.gamejam.gameplay.map;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.gameplay.planet.Planet;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
-
-import java.util.concurrent.ThreadLocalRandom;
+import com.nerds.gamejam.util.RandomSeed;
 
 public class PlanetMapFactory {
 
@@ -12,9 +11,11 @@ public class PlanetMapFactory {
     private static final int SYSTEM_HEIGHT = 512;
 
     private final PlanetFactory planetFactory;
+    private final RandomSeed randomSeed;
 
-    public PlanetMapFactory(PlanetFactory planetFactory) {
+    public PlanetMapFactory(PlanetFactory planetFactory, RandomSeed randomSeed) {
         this.planetFactory = planetFactory;
+        this.randomSeed = randomSeed;
     }
 
     public PlanetMap createMap(int maxPlanets) {
@@ -26,8 +27,8 @@ public class PlanetMapFactory {
         Array<Planet> nodeList = new Array<>();
         for (int i = 0; i < areaWidth; i+= boxSize) {
             for (int j = 0; j < areaHeight; j+= boxSize) {
-                int randomX = ThreadLocalRandom.current().nextInt(i + minDistance, i + boxSize - minDistance);
-                int randomY = ThreadLocalRandom.current().nextInt(j + minDistance, j + boxSize - minDistance);
+                int randomX = randomSeed.getRandomGenerator().ints(i + minDistance, i + boxSize - minDistance).findFirst().getAsInt();
+                int randomY = randomSeed.getRandomGenerator().ints(j + minDistance, j + boxSize - minDistance).findFirst().getAsInt();
                 nodeList.add(planetFactory.createPlanet(randomX, randomY));
             }
 

@@ -26,19 +26,15 @@ public class GameScreen extends ScreenAdapter {
     private final GameJam game;
     private final Stage stage;
     private final Skin skin;
-    private final PlanetMapFactory planetMapFactory;
     private final Screen menuScreen;
-    private Table table;
-    private PlanetMapStager planetMapStager;
-    private final PlanetMap map;
+    private final PlanetMapStager planetMapStager;
 
     public GameScreen(GameJam game, Stage stage, Skin skin, GameStrings strings, PlanetMapFactory planetMapFactory) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
-        this.planetMapFactory = planetMapFactory;
-        this.menuScreen = new MenuScreen(game, stage, skin, this);
-        map = planetMapFactory.createMap(60);
+        this.menuScreen = new MenuScreen(game, stage, skin, this, strings);
+        PlanetMap map = planetMapFactory.createMap(60);
         planetMapStager = new PlanetMapStager(map);
     }
 

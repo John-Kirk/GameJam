@@ -1,13 +1,13 @@
 package com.nerds.gamejam.gameplay.planet;
 
-import java.util.Random;
+import com.nerds.gamejam.util.RandomSeed;
 
 public class PlanetFactory {
 
-    private Random random;
+    private final RandomSeed randomSeed;
 
-    public PlanetFactory() {
-        this.random = new Random();
+    public PlanetFactory(RandomSeed randomSeed) {
+        this.randomSeed = randomSeed;
     }
 
     public Planet createPlanet(int x, int y) {
@@ -18,7 +18,7 @@ public class PlanetFactory {
         }
         Landmass landmass = randomEnum(Landmass.class);
 
-        float planetScale = random.nextFloat()+0.5f;
+        float planetScale = randomSeed.getRandomGenerator().nextFloat()+0.5f;
         float width = planetScale * 128;
         float height = planetScale * 128;
 
@@ -26,7 +26,7 @@ public class PlanetFactory {
     }
 
     public <T extends Enum<?>> T randomEnum(Class<T> clazz){
-        int x = random.nextInt(clazz.getEnumConstants().length);
+        int x = randomSeed.getRandomGenerator().nextInt(clazz.getEnumConstants().length);
         return clazz.getEnumConstants()[x];
     }
 

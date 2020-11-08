@@ -10,6 +10,7 @@ import com.nerds.gamejam.gameplay.map.PlanetMapFactory;
 import com.nerds.gamejam.gameplay.map.PlanetMapStager;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
+import com.nerds.gamejam.gameplay.planet.PlanetNameFactory;
 import com.nerds.gamejam.screen.GameScreen;
 import com.nerds.gamejam.screen.StartScreen;
 import com.nerds.gamejam.translation.GameStrings;
@@ -32,6 +33,7 @@ public class GameJam extends Game {
 			.addComponent(GameStrings.class)
 			.addComponent(RandomSeed.class)
 			.addComponent(PlanetFactory.class)
+			.addComponent(PlanetMapFactory.class)
 			.addComponent(PlanetNameFactory.class);
 
 		Gdx.input.setInputProcessor(picoContainer.getComponent(Stage.class));
