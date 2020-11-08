@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.translation.GameStrings;
 
 public class MenuScreen extends ScreenAdapter {
 
@@ -20,25 +21,27 @@ public class MenuScreen extends ScreenAdapter {
     private final Stage stage;
     private final Skin skin;
     private final Screen gameScreen;
+    private final GameStrings strings;
 
-    public MenuScreen(GameJam game, Stage stage, Skin skin, Screen gameScreen) {
+    public MenuScreen(GameJam game, Stage stage, Skin skin, Screen gameScreen, GameStrings strings) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
         this.gameScreen = gameScreen;
+        this.strings = strings;
     }
 
     @Override
     public void show() {
         Table table = new Table();
-        Button resume = new TextButton("Resume", skin);
+        Button resume = new TextButton(strings.get("resumeButton"), skin);
         resume.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(gameScreen);
             }
         });
-        Button restart = new TextButton("Restart", skin);
+        Button restart = new TextButton(strings.get("restartButton"), skin);
         table.add(resume);
         table.setFillParent(true);
         stage.addActor(table);

@@ -9,13 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.nerds.gamejam.gameplay.map.PlanetMapFactory;
 import com.nerds.gamejam.gameplay.map.PlanetMapStager;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
+import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.screen.GameScreen;
 import com.nerds.gamejam.screen.StartScreen;
 import com.nerds.gamejam.translation.GameStrings;
+import com.nerds.gamejam.util.RandomSeed;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.injectors.ConstructorInjection;
-
-import java.util.Random;
 
 public class GameJam extends Game {
 	
@@ -30,9 +30,9 @@ public class GameJam extends Game {
 			.addComponent(StartScreen.class)
 			.addComponent(GameScreen.class)
 			.addComponent(GameStrings.class)
-			.addComponent(Random.class)
+			.addComponent(RandomSeed.class)
 			.addComponent(PlanetFactory.class)
-			.addComponent(PlanetMapFactory.class);
+			.addComponent(PlanetNameFactory.class);
 
 		Gdx.input.setInputProcessor(picoContainer.getComponent(Stage.class));
 		setScreen(picoContainer.getComponent(StartScreen.class));

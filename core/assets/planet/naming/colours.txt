@@ -1,0 +1,10 @@
+White
+Black
+Red
+Grey
+Blue
+Sapphire
+Emerald
+Ruby
+Gold
+Rose
