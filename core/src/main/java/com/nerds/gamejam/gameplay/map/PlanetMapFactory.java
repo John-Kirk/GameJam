@@ -3,52 +3,40 @@ package com.nerds.gamejam.gameplay.map;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.gameplay.planet.Planet;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
-
-import java.util.Random;
+import com.nerds.gamejam.util.RandomSeed;
 
 public class PlanetMapFactory {
 
+    private static final int SYSTEM_WIDTH = 8192;
+    private static final int SYSTEM_HEIGHT = 512;
+
     private final PlanetFactory planetFactory;
-    private final Random random;
+    private final RandomSeed randomSeed;
 
-    public PlanetMapFactory(PlanetFactory planetFactory, Random random) {
+    public PlanetMapFactory(PlanetFactory planetFactory, RandomSeed randomSeed) {
         this.planetFactory = planetFactory;
-        this.random = random;
+        this.randomSeed = randomSeed;
     }
 
-    public PlanetMap createMap(int maxUpcomingSystems, int minUpcomingSystems, int maxPlanetsPerSystem, int minPlanetsPerSystem) {
-        System trailingSystem = createSystem(maxPlanetsPerSystem, 1);
-        System startingSystem = createSystem(1, 1);
-        Array<System> upcomingPlanets = createUpcomingPlanets(maxUpcomingSystems, minUpcomingSystems, maxPlanetsPerSystem, minPlanetsPerSystem);
-
-        return new PlanetMap(trailingSystem, startingSystem, upcomingPlanets);
+    public PlanetMap createMap(int maxPlanets) {
+        Array<Planet> planets = generateNodes(SYSTEM_WIDTH, SYSTEM_HEIGHT, 256, 64, maxPlanets);
+        return new PlanetMap(planets);
     }
 
-    private Array<System> createUpcomingPlanets(int maxSystems, int minSystems, int maxPlanetsPerSystem, int minPlanetsPerSystem) {
-        Array<System> systems = new Array<>();
+    private Array<Planet> generateNodes(int areaWidth, int areaHeight, int boxSize, int minDistance, int maxPlanets) {
+        Array<Planet> nodeList = new Array<>();
+        for (int i = 0; i < areaWidth; i+= boxSize) {
+            for (int j = 0; j < areaHeight; j+= boxSize) {
+                int randomX = randomSeed.getRandomGenerator().ints(i + minDistance, i + boxSize - minDistance).findFirst().getAsInt();
+                int randomY = randomSeed.getRandomGenerator().ints(j + minDistance, j + boxSize - minDistance).findFirst().getAsInt();
+                nodeList.add(planetFactory.createPlanet(randomX, randomY));
+            }
 
-        if (maxSystems > 0) {
-            int numSystems = random.nextInt(maxSystems) + minSystems;
-
-            for (int i = 0; i < numSystems; i++) {
-                systems.add(createSystem(maxPlanetsPerSystem, minPlanetsPerSystem));
+            if (nodeList.size >= maxPlanets) {
+                return nodeList;
             }
         }
 
-        return systems;
-    }
-
-    private System createSystem(int maxAmountPlanets, int minAmountPlanets) {
-        Array<Planet> planets = new Array<>();
-
-        if (maxAmountPlanets > 0) {
-            int numPlanets = random.nextInt(maxAmountPlanets) + minAmountPlanets;
-
-            for (int i = 0; i < numPlanets; i++) {
-                planets.add(planetFactory.createPlanet());
-            }
-        }
-
-        return new System(planets);
+        return nodeList;
     }
 }
