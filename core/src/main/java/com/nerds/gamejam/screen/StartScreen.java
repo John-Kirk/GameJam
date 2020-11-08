@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.actor.ScrollingBackground;
 
@@ -19,11 +18,13 @@ public class StartScreen extends ScreenAdapter {
     private final GameJam game;
     private final Stage stage;
     private final Skin skin;
+    private final GameScreen gameScreen;
 
-    public StartScreen(GameJam game, Stage stage, Skin skin) {
+    public StartScreen(GameJam game, Stage stage, Skin skin, GameScreen gameScreen) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
+        this.gameScreen = gameScreen;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class StartScreen extends ScreenAdapter {
         startButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game, stage, skin));
+                game.setScreen(gameScreen);
             }
         });
         return startButton;
@@ -112,6 +113,7 @@ public class StartScreen extends ScreenAdapter {
     @Override
     public void hide() {
         stage.getActors().forEach(Actor::remove);
+        stage.clear();
     }
 
     @Override
