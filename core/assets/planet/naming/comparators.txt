@@ -1,0 +1,8 @@
+Prime
+Greater
+Minor
+New
+Old
+Ancient
+Deep
+Shallow
