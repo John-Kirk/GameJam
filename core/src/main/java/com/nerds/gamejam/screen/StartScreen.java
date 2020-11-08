@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.actor.ScrollingBackground;
 
@@ -114,6 +113,7 @@ public class StartScreen extends ScreenAdapter {
     @Override
     public void hide() {
         stage.getActors().forEach(Actor::remove);
+        stage.clear();
     }
 
     @Override

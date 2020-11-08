@@ -7,52 +7,41 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
 
-public class GameScreen extends ScreenAdapter {
+public class MenuScreen extends ScreenAdapter {
 
     private final GameJam game;
     private final Stage stage;
     private final Skin skin;
-    private final Screen menuScreen;
-    private Table table;
+    private final Screen gameScreen;
 
-    public GameScreen(GameJam game, Stage stage, Skin skin) {
+    public MenuScreen(GameJam game, Stage stage, Skin skin, Screen gameScreen) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
-        this.menuScreen = new MenuScreen(game, stage, skin, this);
-        initialise();
-    }
-
-    private void initialise() {
-
-        table = new Table();
-        table.add(new Label("Hello there!", skin)).expand();
-        table.setFillParent(true);
+        this.gameScreen = gameScreen;
     }
 
     @Override
     public void show() {
-        stage.addActor(createPauseButton());
-        stage.addActor(table);
-    }
-
-    private Button createPauseButton() {
-        Button button = new TextButton("||", skin);
-        button.setPosition(
-                Gdx.graphics.getWidth() - button.getWidth() - 10,
-                Gdx.graphics.getHeight() - button.getHeight() - 10
-        );
-        button.addListener(new ClickListener() {
+        Table table = new Table();
+        Button resume = new TextButton("Resume", skin);
+        resume.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(menuScreen);
+                game.setScreen(gameScreen);
             }
         });
-        return button;
+        Button restart = new TextButton("Restart", skin);
+        table.add(resume);
+        table.setFillParent(true);
+        stage.addActor(table);
     }
 
     @Override
