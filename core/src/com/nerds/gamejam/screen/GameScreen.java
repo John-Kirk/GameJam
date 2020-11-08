@@ -1,15 +1,17 @@
 package com.nerds.gamejam.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.actor.AnimatedImage;
 import com.nerds.gamejam.actor.PlanetActor;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 
@@ -19,7 +21,6 @@ public class GameScreen extends ScreenAdapter {
     private final Stage stage;
     private final Skin skin;
     private PlanetFactory planetFactory;
-    private PlanetActor planetActor;
 
     public GameScreen(GameJam game, Stage stage, Skin skin) {
         this.game = game;
@@ -31,22 +32,17 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         Table table = new Table();
-        planetActor = new PlanetActor(planetFactory.createPlanet());
-        planetActor.setWidth(128);
-        planetActor.setHeight(128);
-
-        stage.addListener(new InputListener() {
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.SPACE) {
-                    planetActor.setPlanet(planetFactory.createPlanet());
-                }
-
-                return false;
-            }
-        });
-
-        table.add(planetActor).expand();
+        table.add(new PlanetActor(planetFactory.createPlanet())).pad(10);
+        Array<TextureRegion> textureRegionArray = new Array<>();
+        for (int i = 1; i < 6; i++) {
+            TextureRegion textureRegion = new TextureRegion(new Texture("stripe/stripe_" + i + ".png"));
+            textureRegionArray.add(textureRegion);
+        }
+        Animation<TextureRegion> textureRegionAnimation = new Animation<>(0.5f, textureRegionArray);
+        AnimatedImage animatedImage = new AnimatedImage(textureRegionAnimation);
+        animatedImage.setColor(Color.LIME);
+        table.add(animatedImage).fillX().expandX();
+        table.add(new PlanetActor(planetFactory.createPlanet())).pad(10);
         table.setFillParent(true);
         stage.addActor(table);
     }
