@@ -10,7 +10,7 @@ public class PlanetFactory {
         this.random = new Random();
     }
 
-    public Planet createPlanet() {
+    public Planet createPlanet(int x, int y) {
         Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
@@ -19,8 +19,10 @@ public class PlanetFactory {
         Landmass landmass = randomEnum(Landmass.class);
 
         float planetScale = random.nextFloat()+0.5f;
+        float width = planetScale * 128;
+        float height = planetScale * 128;
 
-        return new Planet(baseMaterial, secondaryMaterial, landmass, planetScale);
+        return new Planet(baseMaterial, secondaryMaterial, landmass, x, y, width, height);
     }
 
     public <T extends Enum<?>> T randomEnum(Class<T> clazz){

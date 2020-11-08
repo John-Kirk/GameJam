@@ -1,5 +1,6 @@
 package com.nerds.gamejam.gameplay.map;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.actor.PlanetActor;
@@ -13,25 +14,15 @@ public class PlanetMapStager {
         this.planetMap = planetMap;
     }
 
-    public Table createPlanetMapActors() {
+    public Table createPlanetMapActors(Stage stage) {
         Table mapTable = new Table();
-        addSystem(planetMap.getTrailingSystem(), mapTable);
-        addSystem(planetMap.getHomeSystem(), mapTable);
-        planetMap.getUpcomingSystems().forEach(system -> {
-            addSystem(system, mapTable);
+
+        planetMap.getPlanets().forEach(planet -> {
+            PlanetActor planetActor = new PlanetActor(planet);
+            planetActor.setPosition(planet.getX(), planet.getY());
+            stage.addActor(planetActor);
         });
 
         return mapTable;
-    }
-
-    private void addSystem(System system, Table mapTable) {
-        Table systemTable = new Table();
-
-        system.getPlanets().forEach(planet -> {
-            PlanetActor planetActor = new PlanetActor(planet);
-            systemTable.add(planetActor).expand().pad(192);
-            systemTable.row();
-        });
-        mapTable.add(systemTable);
     }
 }

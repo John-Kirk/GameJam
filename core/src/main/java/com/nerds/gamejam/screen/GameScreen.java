@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.actor.PlanetActor;
+import com.nerds.gamejam.gameplay.map.PlanetMap;
 import com.nerds.gamejam.gameplay.map.PlanetMapFactory;
 import com.nerds.gamejam.gameplay.map.PlanetMapStager;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
@@ -24,34 +25,26 @@ public class GameScreen extends ScreenAdapter {
     private final GameJam game;
     private final Stage stage;
     private final Skin skin;
+    private final PlanetMapFactory planetMapFactory;
     private final Screen menuScreen;
     private Table table;
     private PlanetMapStager planetMapStager;
+    private final PlanetMap map;
 
-    public GameScreen(GameJam game, Stage stage, Skin skin) {
+    public GameScreen(GameJam game, Stage stage, Skin skin, PlanetMapFactory planetMapFactory) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
+        this.planetMapFactory = planetMapFactory;
         this.menuScreen = new MenuScreen(game, stage, skin, this);
-        initialise();
-    }
-
-    private void initialise() {
-        PlanetMapFactory planetMapFactory = new PlanetMapFactory(new PlanetFactory(), new Random());
-        planetMapStager = new PlanetMapStager(planetMapFactory.createMap(13, 10, 3, 0));
-
-        Table planetMapActors = planetMapStager.createPlanetMapActors();
-
-        table = new Table();
-        table.add(planetMapActors);
-        table.setFillParent(true);
-        table.debug();
+        map = planetMapFactory.createMap(60);
+        planetMapStager = new PlanetMapStager(map);
     }
 
     @Override
     public void show() {
         stage.addActor(createPauseButton());
-        stage.addActor(table);
+        planetMapStager.createPlanetMapActors(stage);
     }
 
     private Button createPauseButton() {
