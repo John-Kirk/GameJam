@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.util.RandomSeed;
 import com.nerds.gamejam.actor.ScrollingBackground;
 
 public class StartScreen extends ScreenAdapter {
@@ -19,12 +20,14 @@ public class StartScreen extends ScreenAdapter {
     private final Stage stage;
     private final Skin skin;
     private final GameScreen gameScreen;
+    private final RandomSeed randomSeed;
 
-    public StartScreen(GameJam game, Stage stage, Skin skin, GameScreen gameScreen) {
+    public StartScreen(GameJam game, Stage stage, Skin skin, GameScreen gameScreen, RandomSeed randomSeed) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
         this.gameScreen = gameScreen;
+        this.randomSeed = randomSeed;
     }
 
     @Override
@@ -74,6 +77,7 @@ public class StartScreen extends ScreenAdapter {
         startButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                randomSeed.regenerateSeed();
                 game.setScreen(gameScreen);
             }
         });
