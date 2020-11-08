@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.util.RandomSeed;
 import com.nerds.gamejam.actor.ScrollingBackground;
+import com.nerds.gamejam.translation.GameStrings;
 
 public class StartScreen extends ScreenAdapter {
 
@@ -21,13 +22,15 @@ public class StartScreen extends ScreenAdapter {
     private final Skin skin;
     private final GameScreen gameScreen;
     private final RandomSeed randomSeed;
+    private final GameStrings strings;
 
-    public StartScreen(GameJam game, Stage stage, Skin skin, GameScreen gameScreen, RandomSeed randomSeed) {
+    public StartScreen(GameJam game, Stage stage, Skin skin, GameScreen gameScreen, RandomSeed randomSeed, GameStrings strings) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
         this.gameScreen = gameScreen;
         this.randomSeed = randomSeed;
+        this.strings = strings;
     }
 
     @Override
@@ -73,7 +76,7 @@ public class StartScreen extends ScreenAdapter {
     }
 
     private Button createStartButton() {
-        Button startButton = new TextButton("Start New Game", skin);
+        Button startButton = new TextButton(strings.get("newGameButton"), skin);
         startButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -85,13 +88,13 @@ public class StartScreen extends ScreenAdapter {
     }
 
     private Button createResumeButton() {
-        Button resumeButton = new TextButton("Continue Game", skin);
+        Button resumeButton = new TextButton(strings.get("continueGameButton"), skin);
         resumeButton.setTouchable(Touchable.disabled);
         return resumeButton;
     }
 
     private Button createExitButton() {
-        Button quitButton = new TextButton("Quit Game", skin);
+        Button quitButton = new TextButton(strings.get("quitGameButton"), skin);
         quitButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
