@@ -16,31 +16,15 @@ public class PlanetActor extends Actor {
 
     public PlanetActor(Planet planet) {
         this.planet = planet;
-        this.setScale(planet.getScale());
         this.setWidth(128);
         this.setHeight(128);
+        this.setScale(planet.getScale());
     }
 
     @Override
-    public float getWidth() {
-        return super.getWidth() * getScaleX();
-    }
-
-    @Override
-    public float getHeight() {
-        return super.getHeight() * getScaleY();
-    }
-
-    @Override
-    public float getX() {
-        float delta = super.getWidth() - this.getWidth();
-        return super.getX() + delta/2;
-    }
-
-    @Override
-    public float getY() {
-        float delta = super.getHeight() - this.getHeight();
-        return super.getY() + delta/2;
+    protected void scaleChanged() {
+        this.setWidth(getWidth() * getScaleX());
+        this.setHeight(getHeight() * getScaleY());
     }
 
     public void setPlanet(Planet planet) {
