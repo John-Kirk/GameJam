@@ -24,7 +24,9 @@ public class GameJam extends Game {
 			.addComponent(this)
 			.addComponent(StartScreen.class)
 			.addComponent(GameScreen.class)
-			.addComponent(GameStrings.class);
+			.addComponent(GameStrings.class)
+			.addComponent(RandomSeed.class)
+			.addComponent(PlanetNameFactory.class);
 
 		Gdx.input.setInputProcessor(picoContainer.getComponent(Stage.class));
 		setScreen(picoContainer.getComponent(StartScreen.class));
