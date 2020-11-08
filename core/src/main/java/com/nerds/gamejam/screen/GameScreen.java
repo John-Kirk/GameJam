@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.translation.GameStrings;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -19,11 +20,11 @@ public class GameScreen extends ScreenAdapter {
     private final Screen menuScreen;
     private Table table;
 
-    public GameScreen(GameJam game, Stage stage, Skin skin) {
+    public GameScreen(GameJam game, Stage stage, Skin skin, GameStrings strings) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
-        this.menuScreen = new MenuScreen(game, stage, skin, this);
+        this.menuScreen = new MenuScreen(game, stage, skin, this, strings);
         initialise();
     }
 
