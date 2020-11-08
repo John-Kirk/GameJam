@@ -1,6 +1,7 @@
 package com.nerds.gamejam.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,7 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.actor.PlanetActor;
+import com.nerds.gamejam.gameplay.map.PlanetMapFactory;
+import com.nerds.gamejam.gameplay.map.PlanetMapStager;
+import com.nerds.gamejam.gameplay.planet.PlanetFactory;
+
+import java.util.Random;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -18,6 +26,7 @@ public class GameScreen extends ScreenAdapter {
     private final Skin skin;
     private final Screen menuScreen;
     private Table table;
+    private PlanetMapStager planetMapStager;
 
     public GameScreen(GameJam game, Stage stage, Skin skin) {
         this.game = game;
@@ -28,10 +37,15 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void initialise() {
+        PlanetMapFactory planetMapFactory = new PlanetMapFactory(new PlanetFactory(), new Random());
+        planetMapStager = new PlanetMapStager(planetMapFactory.createMap(13, 10, 3, 0));
+
+        Table planetMapActors = planetMapStager.createPlanetMapActors();
 
         table = new Table();
-        table.add(new Label("Hello there!", skin)).expand();
+        table.add(planetMapActors);
         table.setFillParent(true);
+        table.debug();
     }
 
     @Override
@@ -65,6 +79,14 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            stage.getViewport().getCamera().position.x += 25;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            stage.getViewport().getCamera().position.x -= 25;
+        }
     }
 
     @Override
