@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.translation.GameStrings;
 import com.nerds.gamejam.actor.PlanetActor;
 import com.nerds.gamejam.gameplay.map.PlanetMapFactory;
 import com.nerds.gamejam.gameplay.map.PlanetMapStager;
@@ -28,11 +29,11 @@ public class GameScreen extends ScreenAdapter {
     private Table table;
     private PlanetMapStager planetMapStager;
 
-    public GameScreen(GameJam game, Stage stage, Skin skin) {
+    public GameScreen(GameJam game, Stage stage, Skin skin, GameStrings strings) {
         this.game = game;
         this.stage = stage;
         this.skin = skin;
-        this.menuScreen = new MenuScreen(game, stage, skin, this);
+        this.menuScreen = new MenuScreen(game, stage, skin, this, strings);
         initialise();
     }
 
@@ -45,7 +46,6 @@ public class GameScreen extends ScreenAdapter {
         table = new Table();
         table.add(planetMapActors);
         table.setFillParent(true);
-        table.debug();
     }
 
     @Override
