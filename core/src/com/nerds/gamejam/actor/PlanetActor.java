@@ -24,18 +24,26 @@ public class PlanetActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        float x = getX();
-        float y = getY();
-        float width = getWidth() * planet.getScale();
-        float height = getHeight() * planet.getScale();
+        float scale = planet.getScale();
+        float width = getWidth();
+        float height = getHeight();
+
+        float scaledWidth = width * scale;
+        float scaledHeight = height * scale;
+
+        float deltaX = width - scaledWidth;
+        float deltaY = height - scaledWidth;
+
+        float x = getX() + deltaX/2;
+        float y = getY() + deltaY/2;
 
         batch.setColor(Color.BLACK);
-        batch.draw(outline, x, y, width, height);
+        batch.draw(outline, x, y, scaledWidth, scaledHeight);
         batch.setColor(planet.getBaseMaterial().getColor());
-        batch.draw(base, x, y, width, height);
+        batch.draw(base, x, y, scaledWidth, scaledHeight);
         batch.setColor(planet.getSecondaryMaterial().getColor());
-        batch.draw(new Texture(planet.getLandmass().getFileName()), x, y, width, height);
+        batch.draw(new Texture(planet.getLandmass().getFileName()), x, y, scaledWidth, scaledHeight);
         batch.setColor(0, 0, 0, 0.3f);
-        batch.draw(shadow, x, y, width, height);
+        batch.draw(shadow, x, y, scaledWidth, scaledHeight);
     }
 }
