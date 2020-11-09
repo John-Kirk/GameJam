@@ -67,7 +67,7 @@ public class PlanetFactory {
     }
 
     private boolean shouldBeDeathStar() {
-        return randomSeed.getRandomGenerator().nextInt(101) == 100;
+        return GameJam.randomSeed.getRandomGenerator().nextInt(101) == 100;
     }
 
     public <T extends Enum<?>> T randomEnum(Class<T> clazz){
