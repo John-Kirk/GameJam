@@ -11,26 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
-import com.nerds.gamejam.util.RandomSeed;
 import com.nerds.gamejam.actor.ScrollingBackground;
-import com.nerds.gamejam.translation.GameStrings;
 
 public class StartScreen extends ScreenAdapter {
 
     private final GameJam game;
     private final Stage stage;
-    private final Skin skin;
     private final GameScreen gameScreen;
-    private final RandomSeed randomSeed;
-    private final GameStrings strings;
 
-    public StartScreen(GameJam game, Stage stage, Skin skin, GameScreen gameScreen, RandomSeed randomSeed, GameStrings strings) {
+    public StartScreen(GameJam game, Stage stage) {
         this.game = game;
         this.stage = stage;
-        this.skin = skin;
-        this.gameScreen = gameScreen;
-        this.randomSeed = randomSeed;
-        this.strings = strings;
+        this.gameScreen = new GameScreen(this.game);
     }
 
     @Override
@@ -76,11 +68,11 @@ public class StartScreen extends ScreenAdapter {
     }
 
     private Button createStartButton() {
-        Button startButton = new TextButton(strings.get("newGameButton"), skin);
+        Button startButton = new TextButton(GameJam.gameStrings.get("newGameButton"), GameJam.skin);
         startButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                randomSeed.regenerateSeed();
+                GameJam.randomSeed.regenerateSeed();
                 game.setScreen(gameScreen);
             }
         });
@@ -88,13 +80,13 @@ public class StartScreen extends ScreenAdapter {
     }
 
     private Button createResumeButton() {
-        Button resumeButton = new TextButton(strings.get("continueGameButton"), skin);
+        Button resumeButton = new TextButton(GameJam.gameStrings.get("continueGameButton"), GameJam.skin);
         resumeButton.setTouchable(Touchable.disabled);
         return resumeButton;
     }
 
     private Button createExitButton() {
-        Button quitButton = new TextButton(strings.get("quitGameButton"), skin);
+        Button quitButton = new TextButton(GameJam.gameStrings.get("quitGameButton"), GameJam.skin);
         quitButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
