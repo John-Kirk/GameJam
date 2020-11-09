@@ -16,7 +16,10 @@ public class PlanetFactory {
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
             secondaryMaterial = randomEnum(Material.class);
         }
-        Landmass landmass = randomEnum(Landmass.class);
+        Landmass landmass = null;
+        while (landmass == null || landmass == Landmass.DEATH_STAR) {
+            landmass = randomEnum(Landmass.class);
+        }
 
         if (shouldBeDeathStar()) {
             baseMaterial = Material.METAL;
