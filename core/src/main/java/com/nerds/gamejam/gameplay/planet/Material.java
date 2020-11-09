@@ -11,7 +11,9 @@ public enum Material {
     RED_SAND(244,67,54, 1),
     GRASS(118,255,3, 1),
     ROCK(96,125,139, 1),
-    BASALT(33,33,33, 1);
+    BASALT(33,33,33, 1),
+    METAL(75, 75, 75, 1),
+    METAL_2(66, 66, 66, 1);
 
     private Color color;
 

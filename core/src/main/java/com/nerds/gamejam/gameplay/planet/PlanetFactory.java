@@ -39,7 +39,16 @@ public class PlanetFactory {
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
             secondaryMaterial = randomEnum(Material.class);
         }
-        Landmass landmass = randomEnum(Landmass.class);
+        Landmass landmass = null;
+        while (landmass == null || landmass == Landmass.DEATH_STAR) {
+            landmass = randomEnum(Landmass.class);
+        }
+
+        if (shouldBeDeathStar()) {
+            baseMaterial = Material.METAL;
+            secondaryMaterial = Material.METAL_2;
+            landmass = Landmass.DEATH_STAR;
+        }
 
         float planetScale = GameJam.randomSeed.getRandomGenerator().nextFloat() + 0.5f;
         Array<Sprite> sprites = new Array<>(4);
@@ -55,6 +64,10 @@ public class PlanetFactory {
               .add(new LandmassComponent(landmass))
               .add(new CompositeSpriteComponent(sprites))
               .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
+    }
+
+    private boolean shouldBeDeathStar() {
+        return randomSeed.getRandomGenerator().nextInt(101) == 100;
     }
 
     public <T extends Enum<?>> T randomEnum(Class<T> clazz){
