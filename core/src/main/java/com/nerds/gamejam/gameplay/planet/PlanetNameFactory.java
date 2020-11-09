@@ -2,6 +2,7 @@ package com.nerds.gamejam.gameplay.planet;
 
 import com.badlogic.gdx.Gdx;
 import com.github.chaosfirebolt.converter.RomanInteger;
+import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.util.RandomSeed;
 
 import java.io.IOException;
@@ -10,14 +11,12 @@ import java.util.List;
 
 public class PlanetNameFactory {
 
-    private final RandomSeed randomSeed;
     private final List<String> singleNames;
     private final List<String> colours;
     private final List<String> comparators;
     private final List<String> greek;
 
-    public PlanetNameFactory(RandomSeed randomSeed) {
-        this.randomSeed = randomSeed;
+    public PlanetNameFactory() {
         singleNames = readStringsFromFile("single-names");
         colours = readStringsFromFile("colours");
         comparators = readStringsFromFile("comparators");
@@ -42,8 +41,8 @@ public class PlanetNameFactory {
     }
 
     private String getNumeral() {
-        if (randomSeed.getRandomGenerator().nextBoolean()) {
-            return " " + RomanInteger.parse(String.valueOf(randomSeed.getRandomGenerator().nextInt(27) + 1)).toString();
+        if (GameJam.randomSeed.getRandomGenerator().nextBoolean()) {
+            return " " + RomanInteger.parse(String.valueOf(GameJam.randomSeed.getRandomGenerator().nextInt(27) + 1)).toString();
         }
         return "";
     }
@@ -65,8 +64,8 @@ public class PlanetNameFactory {
     }
 
     private String getFix() {
-        if (randomSeed.getRandomGenerator().nextBoolean()) {
-            int generationStrategy = randomSeed.getRandomGenerator().nextInt(3);
+        if (GameJam.randomSeed.getRandomGenerator().nextBoolean()) {
+            int generationStrategy = GameJam.randomSeed.getRandomGenerator().nextInt(3);
             switch (generationStrategy) {
                 case 0: return getRandomLine(colours);
                 case 1: return getRandomLine(comparators);
@@ -77,6 +76,6 @@ public class PlanetNameFactory {
     }
 
     private String getRandomLine(List<String> list) {
-        return list.get(randomSeed.getRandomGenerator().nextInt(list.size()));
+        return list.get(GameJam.randomSeed.getRandomGenerator().nextInt(list.size()));
     }
 }

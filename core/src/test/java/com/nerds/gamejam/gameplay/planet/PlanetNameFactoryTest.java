@@ -1,6 +1,7 @@
-package com.nerds.gamejam;
+package com.nerds.gamejam.gameplay.planet;
 
-import com.nerds.gamejam.gameplay.planet.PlanetNameFactory;
+import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.LibGdxTest;
 import com.nerds.gamejam.util.RandomSeed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,8 @@ public class PlanetNameFactoryTest extends LibGdxTest {
         RandomSeed randomSeed = mock(RandomSeed.class);
         random = mock(Random.class);
         when(randomSeed.getRandomGenerator()).thenReturn(random);
-        planetNameFactory = new PlanetNameFactory(randomSeed);
+        GameJam.randomSeed = randomSeed;
+        planetNameFactory = new PlanetNameFactory();
     }
 
     @Test
