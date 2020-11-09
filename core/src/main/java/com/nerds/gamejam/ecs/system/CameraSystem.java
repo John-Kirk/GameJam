@@ -26,8 +26,8 @@ public class CameraSystem extends BaseSystem {
         }
         if (this.camera.position.x < 0) {
             this.camera.position.x = 0;
-        } else if (this.camera.position.x > 8192) {
-            this.camera.position.x = 8192;
+        } else if (this.camera.position.x > GameJam.PLANET_VIEW_WIDTH) {
+            this.camera.position.x = GameJam.PLANET_VIEW_WIDTH;
         }
         this.camera.update();
     }
