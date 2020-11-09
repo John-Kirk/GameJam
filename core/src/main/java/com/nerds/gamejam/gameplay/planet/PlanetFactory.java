@@ -18,11 +18,21 @@ public class PlanetFactory {
         }
         Landmass landmass = randomEnum(Landmass.class);
 
+        if (shouldBeDeathStar()) {
+            baseMaterial = Material.METAL;
+            secondaryMaterial = Material.METAL_2;
+            landmass = Landmass.DEATH_STAR;
+        }
+
         float planetScale = randomSeed.getRandomGenerator().nextFloat()+0.5f;
         float width = planetScale * 128;
         float height = planetScale * 128;
 
         return new Planet(baseMaterial, secondaryMaterial, landmass, x, y, width, height);
+    }
+
+    private boolean shouldBeDeathStar() {
+        return randomSeed.getRandomGenerator().nextInt(101) == 100;
     }
 
     public <T extends Enum<?>> T randomEnum(Class<T> clazz){
