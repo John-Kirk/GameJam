@@ -15,24 +15,31 @@ public class CameraSystem extends BaseSystem {
 
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
+        float aspectRatio = (float)Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+        float worldHeight = GameJam.PLANET_VIEW_HEIGHT;
+        float worldWidth = GameJam.PLANET_VIEW_HEIGHT * aspectRatio;
+
+        this.camera = new OrthographicCamera(worldWidth, worldHeight);
         this.lowerXBound = camera.viewportWidth / 2;
         this.camera.position.x = lowerXBound;
-        this.camera.position.y = camera.viewportHeight / 2;
+        this.camera.position.y = camera.viewportHeight / 2f;
     }
 
     @Override
     protected void processSystem() {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            this.camera.position.x += 100 * world.getDelta();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            this.camera.position.x -= 100 * world.getDelta();
+            this.camera.position.x += 200 * world.getDelta();
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            this.camera.position.x -= 200 * world.getDelta();
+        }
+
         if (this.camera.position.x < lowerXBound) {
             this.camera.position.x = lowerXBound;
         } else if (this.camera.position.x > GameJam.PLANET_VIEW_WIDTH) {
             this.camera.position.x = GameJam.PLANET_VIEW_WIDTH;
         }
+
         this.camera.update();
     }
 }

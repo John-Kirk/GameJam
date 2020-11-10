@@ -50,7 +50,7 @@ public class PlanetFactory {
             landmass = Landmass.DEATH_STAR;
         }
 
-        float planetScale = GameJam.randomSeed.getRandomGenerator().nextFloat() + 0.5f;
+        float planetScale = (GameJam.randomSeed.getRandomGenerator().nextInt(25) + 15) / 10f;
         Array<Sprite> sprites = new Array<>(4);
         sprites.add(new ColouredScaledSprite(OUTLINE_TEXTURE, Color.BLACK, planetScale));
         sprites.add(new ColouredScaledSprite(BASE_TEXTURE, baseMaterial.getColor(), planetScale));
