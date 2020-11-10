@@ -23,8 +23,13 @@ public class GameJam extends Game {
 		randomSeed = new RandomSeed();
 		gameStrings = new GameStrings();
 		skin = new Skin(Gdx.files.getFileHandle("testskin/assets/uiskin.json", Files.FileType.Internal));
-		Stage stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
-		setScreen(new StartScreen(this, stage));
+		setScreen(new StartScreen(this));
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		skin.dispose();
+		this.screen.dispose();
 	}
 }

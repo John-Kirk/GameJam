@@ -8,15 +8,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.screen.MenuScreen;
 
 public class PlanetViewGUISystem extends BaseSystem {
 
+    private final GameJam game;
+    private final MenuScreen menuScreen;
     private Stage stage;
+
+    public PlanetViewGUISystem(GameJam game, MenuScreen menuScreen) {
+        this.game = game;
+        this.menuScreen = menuScreen;
+    }
 
     @Override
     protected void initialize() {
-        stage = new Stage();
-        stage.addActor(createPauseButton());
+        this.stage = new Stage();
+        this.stage.addActor(createPauseButton());
     }
 
     private Button createPauseButton() {
@@ -27,15 +35,17 @@ public class PlanetViewGUISystem extends BaseSystem {
         );
         button.addListener(new ClickListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                //perform pause, maybe greyscale everything via a pause system?
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(menuScreen);
             }
+
         });
         return button;
     }
 
     @Override
     protected void processSystem() {
+        Gdx.input.setInputProcessor(this.stage);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }

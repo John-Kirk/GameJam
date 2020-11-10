@@ -15,7 +15,7 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(GameJam game) {
         this.game = game;
-        this.world = WorldBuilder.build();
+        this.world = WorldBuilder.build(game, new MenuScreen(game, this));
     }
 
     @Override
