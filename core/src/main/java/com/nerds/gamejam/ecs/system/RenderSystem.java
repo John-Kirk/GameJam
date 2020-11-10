@@ -4,12 +4,15 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.nerds.gamejam.ecs.component.AnimationComponent;
 import com.nerds.gamejam.ecs.component.CompositeSpriteComponent;
 import com.nerds.gamejam.ecs.component.FontComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
@@ -23,6 +26,7 @@ public class RenderSystem extends IteratingSystem {
     private ComponentMapper<SpriteComponent> spriteMapper;
     private ComponentMapper<PositionComponent> positionMapper;
     private ComponentMapper<FontComponent> fontMapper;
+    private ComponentMapper<AnimationComponent> animationMapper;
     private CameraSystem cameraSystem;
     private Batch batch;
     private BitmapFont font;
@@ -43,8 +47,32 @@ public class RenderSystem extends IteratingSystem {
         this.batch.begin();
     }
 
+    @Override
     protected void process(int e) {
-        PositionComponent positionComponent = positionMapper.get(e);
+        drawComposites(e);
+        drawSingleSprite(e);
+        drawFont(e);
+        drawAnimation(e);
+    }
+
+    private void drawSingleSprite(int e) {
+        SpriteComponent spriteComponent = this.spriteMapper.get(e);
+        if (spriteComponent != null) {
+            PositionComponent positionComponent = this.positionMapper.get(e);
+            drawSprite(spriteComponent.sprite, positionComponent);
+        }
+    }
+
+    private void drawFont(int e) {
+        FontComponent fontComponent = this.fontMapper.get(e);
+        if (fontComponent != null) {
+            this.font.setColor(Color.WHITE);
+            this.font.draw(this.batch, fontComponent.text, fontComponent.x, fontComponent.y);
+        }
+    }
+
+    private void drawComposites(int e) {
+        PositionComponent positionComponent = this.positionMapper.get(e);
         CompositeSpriteComponent compositeSpriteComponent = this.compositeSpriteMapper.get(e);
         if (compositeSpriteComponent != null) {
             for (int i = 0; i < compositeSpriteComponent.sprites.size; i++) {
@@ -52,14 +80,19 @@ public class RenderSystem extends IteratingSystem {
                 drawSprite(sprite, positionComponent);
             }
         }
-        FontComponent fontComponent = fontMapper.get(e);
-        if (fontComponent != null) {
-            this.font.setColor(Color.WHITE);
-            this.font.draw(this.batch, fontComponent.text, fontComponent.x, fontComponent.y);
-        }
-        SpriteComponent spriteComponent = spriteMapper.get(e);
-        if (spriteComponent != null) {
-            drawSprite(spriteComponent.sprite, positionComponent);
+    }
+
+    private void drawAnimation(int e) {
+        AnimationComponent animationComponent = animationMapper.get(e);
+        if (animationComponent != null) {
+            PositionComponent positionComponent = positionMapper.get(e);
+            animationComponent.elapsedTime += Gdx.graphics.getDeltaTime();
+            TextureRegion keyFrame = animationComponent.animation.getKeyFrame(animationComponent.elapsedTime);
+            this.batch.draw(keyFrame, positionComponent.x, positionComponent.y);
+            if (animationComponent.animation.getPlayMode() == Animation.PlayMode.NORMAL &&
+                  animationComponent.animation.isAnimationFinished(animationComponent.elapsedTime)) {
+                this.world.edit(e).remove(animationComponent);
+            }
         }
     }
 

@@ -11,10 +11,14 @@ import com.nerds.gamejam.GameJam;
 public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
+    private float lowerXBound;
 
     @Override
     protected void initialize() {
         this.camera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
+        this.lowerXBound = camera.viewportWidth / 2;
+        this.camera.position.x = lowerXBound;
+        this.camera.position.y = camera.viewportHeight / 2;
     }
 
     @Override
@@ -24,8 +28,8 @@ public class CameraSystem extends BaseSystem {
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.camera.position.x -= 100 * world.getDelta();
         }
-        if (this.camera.position.x < 0) {
-            this.camera.position.x = 0;
+        if (this.camera.position.x < lowerXBound) {
+            this.camera.position.x = lowerXBound;
         } else if (this.camera.position.x > GameJam.PLANET_VIEW_WIDTH) {
             this.camera.position.x = GameJam.PLANET_VIEW_WIDTH;
         }

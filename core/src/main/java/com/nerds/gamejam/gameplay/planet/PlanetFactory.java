@@ -60,7 +60,7 @@ public class PlanetFactory {
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
               .add(new PositionComponent(x, y))
-              .add(new RenderableComponent())
+              .add(RenderableComponent.INSTANCE)
               .add(new LandmassComponent(landmass))
               .add(new CompositeSpriteComponent(sprites))
               .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
