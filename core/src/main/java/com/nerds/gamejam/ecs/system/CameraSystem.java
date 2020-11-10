@@ -11,14 +11,31 @@ import com.nerds.gamejam.GameJam;
 public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
-    private float lowerXBound;
+    private float halfViewWidth;
+    private float halfViewHeight;
+    private float viewportWidth;
+    private float viewportHeight;
 
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
-        this.lowerXBound = camera.viewportWidth / 2;
-        this.camera.position.x = lowerXBound;
-        this.camera.position.y = camera.viewportHeight / 2;
+        this.camera = new OrthographicCamera(512, 512);
+        setCameraBounds();
+        this.camera.position.x = halfViewWidth;
+        this.camera.position.y = halfViewHeight;
+        this.camera.zoom = 0.5f;
+    }
+
+    protected void resize(int width, int height) {
+        camera.viewportHeight = height;
+        camera.viewportWidth = width;
+        setCameraBounds();
+    }
+
+    private void setCameraBounds() {
+        viewportWidth = camera.viewportWidth * camera.zoom;
+        viewportHeight = camera.viewportHeight * camera.zoom;
+        halfViewWidth = viewportWidth / 2;
+        halfViewHeight = viewportHeight / 2;
     }
 
     @Override
@@ -28,10 +45,30 @@ public class CameraSystem extends BaseSystem {
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.camera.position.x -= 100 * world.getDelta();
         }
-        if (this.camera.position.x < lowerXBound) {
-            this.camera.position.x = lowerXBound;
-        } else if (this.camera.position.x > GameJam.PLANET_VIEW_WIDTH) {
-            this.camera.position.x = GameJam.PLANET_VIEW_WIDTH;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            this.camera.position.y += 100 * world.getDelta();
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            this.camera.position.y -= 100 * world.getDelta();
+        }
+
+        float cameraLeft = camera.position.x - halfViewWidth;
+        float cameraRight = camera.position.x + halfViewWidth;
+        float cameraBottom = camera.position.y - halfViewHeight;
+        float cameraTop = camera.position.y + halfViewHeight;
+
+        if (GameJam.PLANET_VIEW_WIDTH < viewportWidth) {
+            this.camera.position.x = halfViewWidth;
+        } else if (cameraLeft < 0) {
+            camera.position.x = halfViewWidth;
+        } else if (cameraRight > GameJam.PLANET_VIEW_WIDTH) {
+            this.camera.position.x = GameJam.PLANET_VIEW_WIDTH - halfViewWidth;
+        }
+        if (GameJam.PLANET_VIEW_HEIGHT < viewportHeight) {
+            this.camera.position.y = halfViewHeight;
+        } else if (cameraBottom < 0) {
+            this.camera.position.y = halfViewHeight;
+        } else if (cameraTop > GameJam.PLANET_VIEW_HEIGHT) {
+            this.camera.position.y = GameJam.PLANET_VIEW_HEIGHT - halfViewHeight;
         }
         this.camera.update();
     }
