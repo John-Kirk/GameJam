@@ -22,7 +22,7 @@ public class CameraSystem extends BaseSystem {
         this.camera = new OrthographicCamera(worldWidth, worldHeight);
         this.lowerXBound = camera.viewportWidth / 2;
         this.camera.position.x = lowerXBound;
-        this.camera.position.y = camera.viewportHeight / 2f;
+        this.camera.position.y = camera.viewportHeight / 2;
     }
 
     @Override
