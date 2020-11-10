@@ -50,6 +50,13 @@ public class CameraSystem extends BaseSystem {
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             this.camera.position.y -= 100 * world.getDelta();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            this.camera.zoom = Math.min(this.camera.zoom + 0.1f, 1);
+            setCameraBounds();
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            this.camera.zoom = Math.max(this.camera.zoom - 0.1f, 0.3f);
+            setCameraBounds();
+        }
 
         float cameraLeft = camera.position.x - halfViewWidth;
         float cameraRight = camera.position.x + halfViewWidth;
