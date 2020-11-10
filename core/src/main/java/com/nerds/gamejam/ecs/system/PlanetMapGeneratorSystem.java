@@ -51,7 +51,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
                planetCount++;
             }
             if (planetCount >= maxPlanets) {
-                createBackgroundAnimationObjects();
+                //createBackgroundAnimationObjects();
                 return;
             }
         }
