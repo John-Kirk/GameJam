@@ -19,14 +19,15 @@ public class StartScreen extends ScreenAdapter {
     private final Stage stage;
     private final GameScreen gameScreen;
 
-    public StartScreen(GameJam game, Stage stage) {
+    public StartScreen(GameJam game) {
         this.game = game;
-        this.stage = stage;
+        this.stage = new Stage();
         this.gameScreen = new GameScreen(this.game);
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(this.stage);
         Table table = new Table();
         Table innerTable = new Table();
         Button startButton = createStartButton();
@@ -71,7 +72,7 @@ public class StartScreen extends ScreenAdapter {
         Button startButton = new TextButton(GameJam.gameStrings.get("newGameButton"), GameJam.skin);
         startButton.addListener(new ClickListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void clicked(InputEvent event, float x, float y) {
                 GameJam.randomSeed.regenerateSeed();
                 game.setScreen(gameScreen);
             }
@@ -89,7 +90,7 @@ public class StartScreen extends ScreenAdapter {
         Button quitButton = new TextButton(GameJam.gameStrings.get("quitGameButton"), GameJam.skin);
         quitButton.addListener(new ClickListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
