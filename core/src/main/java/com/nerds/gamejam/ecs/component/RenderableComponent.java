@@ -5,4 +5,6 @@ import com.artemis.Component;
 public class RenderableComponent extends Component {
 
     //marker class, if an entity has this component it should be drawn
+
+    public static RenderableComponent INSTANCE = new RenderableComponent();
 }
