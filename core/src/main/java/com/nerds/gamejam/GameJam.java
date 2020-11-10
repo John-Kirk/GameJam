@@ -3,8 +3,6 @@ package com.nerds.gamejam;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.nerds.gamejam.screen.StartScreen;
 import com.nerds.gamejam.translation.GameStrings;
