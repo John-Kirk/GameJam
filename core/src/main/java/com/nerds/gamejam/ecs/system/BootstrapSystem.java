@@ -10,7 +10,7 @@ import com.nerds.gamejam.ecs.component.SpriteComponent;
 public class BootstrapSystem extends BaseSystem {
     private static final Texture BACKGROUND_TEXTURE = new Texture("stars.png");
 
-    {
+    static {
         BACKGROUND_TEXTURE.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     }
 
