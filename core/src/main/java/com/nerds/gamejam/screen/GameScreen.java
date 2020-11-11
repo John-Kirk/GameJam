@@ -3,6 +3,7 @@ package com.nerds.gamejam.screen;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.WorldBuilder;
@@ -12,10 +13,12 @@ public class GameScreen extends ScreenAdapter {
 
     private final GameJam game;
     private final World world;
+    private final FPSLogger fpsLogger;
 
     public GameScreen(GameJam game) {
         this.game = game;
         this.world = WorldBuilder.build(game, new MenuScreen(game, this));
+        this.fpsLogger = new FPSLogger();
     }
 
     @Override
@@ -24,6 +27,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.world.setDelta(delta);
         this.world.process();
+        this.fpsLogger.log();
     }
 
     @Override
