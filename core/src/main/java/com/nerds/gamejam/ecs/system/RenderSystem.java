@@ -107,7 +107,7 @@ public class RenderSystem extends IteratingSystem {
     }
 
     public void resize(int width, int height) {
-        //todo
+        cameraSystem.resize(width, height);
     }
 
     @Override
