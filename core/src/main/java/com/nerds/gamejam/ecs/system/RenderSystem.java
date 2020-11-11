@@ -12,9 +12,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.nerds.gamejam.ecs.component.AnimationComponent;
 import com.nerds.gamejam.ecs.component.CompositeSpriteComponent;
 import com.nerds.gamejam.ecs.component.FontComponent;
+import com.nerds.gamejam.ecs.component.CircleComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.RenderableComponent;
 import com.nerds.gamejam.ecs.component.SpriteComponent;
@@ -24,12 +26,14 @@ public class RenderSystem extends IteratingSystem {
 
     private ComponentMapper<CompositeSpriteComponent> compositeSpriteMapper;
     private ComponentMapper<SpriteComponent> spriteMapper;
+    private ComponentMapper<CircleComponent> circleMapper;
     private ComponentMapper<PositionComponent> positionMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<AnimationComponent> animationMapper;
     private CameraSystem cameraSystem;
     private Batch batch;
     private BitmapFont font;
+    private ShapeRenderer circleRenderer;
 
     public RenderSystem() {
         super(Aspect.all(RenderableComponent.class));
@@ -39,20 +43,32 @@ public class RenderSystem extends IteratingSystem {
     protected void initialize() {
         this.batch = new SpriteBatch();
         this.font = new BitmapFont();
+        this.circleRenderer = new ShapeRenderer();
     }
 
     @Override
     protected void begin() {
-        this.batch.setProjectionMatrix(cameraSystem.camera.combined);
         this.batch.begin();
+        this.batch.setProjectionMatrix(cameraSystem.camera.combined);
+        this.circleRenderer.setProjectionMatrix(cameraSystem.camera.combined);
+        this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
     }
 
     @Override
     protected void process(int e) {
+        drawCircle(e);
         drawComposites(e);
         drawSingleSprite(e);
         drawFont(e);
         drawAnimation(e);
+    }
+
+    private void drawCircle(int e) {
+        CircleComponent circleComponent = this.circleMapper.get(e);
+        if (circleComponent != null) {
+            this.circleRenderer.setColor(Color.WHITE);
+            this.circleRenderer.circle(circleComponent.x , circleComponent.y, circleComponent.radius);
+        }
     }
 
     private void drawSingleSprite(int e) {
@@ -104,6 +120,7 @@ public class RenderSystem extends IteratingSystem {
     @Override
     protected void end() {
         this.batch.end();
+        this.circleRenderer.end();
     }
 
     public void resize(int width, int height) {
@@ -112,7 +129,8 @@ public class RenderSystem extends IteratingSystem {
 
     @Override
     protected void dispose() {
-       this.batch.dispose();
-       this.font.dispose();
+        this.batch.dispose();
+        this.circleRenderer.dispose();
+        this.font.dispose();
     }
 }

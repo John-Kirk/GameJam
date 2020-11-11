@@ -24,17 +24,19 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
     private final Array<TextureRegion> vortexTextureRegionArray;
     private final Array<TextureRegion> sunTextureRegionArray;
 
+    private static final int ANIMATED_TEXTURE_SIZE = 192;
+
     public PlanetMapGeneratorSystem(PlanetFactory planetFactory, int maxPlanets) {
         this.planetFactory = planetFactory;
         this.maxPlanets = maxPlanets;
-        this.nebulaTextureRegionArray = TextureRegionFactory.createTextureRegionArray(nebula, 192, 192, 38);
-        this.vortexTextureRegionArray = TextureRegionFactory.createTextureRegionArray(vortex, 192, 192, 38);
-        this.sunTextureRegionArray = TextureRegionFactory.createTextureRegionArray(sun, 192, 192, 38);
+        this.nebulaTextureRegionArray = TextureRegionFactory.createTextureRegionArray(nebula, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
+        this.vortexTextureRegionArray = TextureRegionFactory.createTextureRegionArray(vortex, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
+        this.sunTextureRegionArray = TextureRegionFactory.createTextureRegionArray(sun, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
     }
 
     @Override
     protected void initialize() {
-        createMap();
+        createSolarSystem();
     }
 
     private void createMap() {
@@ -49,7 +51,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
                 int randomY =
                       GameJam.randomSeed.getRandomGenerator().ints(j + minDistance, j + modifier).findFirst().getAsInt();
                 randomY = MathUtils.clamp(randomY, minDistance, GameJam.PLANET_VIEW_HEIGHT);
-                planetFactory.createPlanet(this.world, randomX, randomY);
+                planetFactory.createPlanet(this.world, randomX, randomY, 0);
                 planetCount++;
             }
             if (planetCount >= maxPlanets) {
@@ -57,6 +59,23 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
                 return;
             }
         }
+    }
+
+    private void createSolarSystem() {
+        int solarXCenter = GameJam.PLANET_VIEW_WIDTH / 2;
+        int solarYCenter = GameJam.PLANET_VIEW_HEIGHT / 2;
+        int planetDist;
+        for (int i = solarXCenter + 50; i < GameJam.PLANET_VIEW_WIDTH; i += planetDist) {
+            planetDist = GameJam.randomSeed.getRandomGenerator().nextInt(100) + 40;
+            planetFactory.createPlanet(this.world, i, i, solarXCenter);
+        }
+        createSun(solarXCenter, solarYCenter);
+    }
+
+    private void createSun(int solarXCenter, int solarYCenter) {
+        this.world.createEntity().edit().add(new PositionComponent(solarXCenter - ANIMATED_TEXTURE_SIZE/2, solarYCenter - ANIMATED_TEXTURE_SIZE/2))
+                .add(new AnimationComponent(sunTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
+                .add(RenderableComponent.INSTANCE);
     }
 
     private void createBackgroundAnimationObjects() {
