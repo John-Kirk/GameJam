@@ -42,7 +42,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
         int modifier = boxSize - minDistance;
         int planetCount = 0;
         for (int i = 0; i < GameJam.PLANET_VIEW_WIDTH; i += 256) {
-            for (int j = 0; j < GameJam.PLANET_VIEW_HEIGHT; j += 256) {
+            for (int j = 0; j < GameJam.PL::ANET_VIEW_HEIGHT; j += 256) {
                 int randomX =
                       GameJam.randomSeed.getRandomGenerator().ints(i + 64, i + modifier).findFirst().getAsInt();
                 int randomY =
@@ -51,7 +51,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
                planetCount++;
             }
             if (planetCount >= maxPlanets) {
-                //createBackgroundAnimationObjects();
+                createBackgroundAnimationObjects();
                 return;
             }
         }
