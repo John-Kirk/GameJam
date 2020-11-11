@@ -4,6 +4,7 @@ import com.artemis.BaseSystem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.AnimationComponent;
@@ -41,14 +42,15 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
         int minDistance = 64;
         int modifier = boxSize - minDistance;
         int planetCount = 0;
-        for (int i = 0; i < GameJam.PLANET_VIEW_WIDTH; i += 256) {
-            for (int j = 0; j < GameJam.PLANET_VIEW_HEIGHT; j += 256) {
+        for (int i = 0; i <= GameJam.PLANET_VIEW_WIDTH - (minDistance + modifier); i += boxSize) {
+            for (int j = 0; j < GameJam.PLANET_VIEW_HEIGHT; j += boxSize) {
                 int randomX =
-                      GameJam.randomSeed.getRandomGenerator().ints(i + 64, i + modifier).findFirst().getAsInt();
+                      GameJam.randomSeed.getRandomGenerator().ints(i + minDistance, i + modifier).findFirst().getAsInt();
                 int randomY =
-                      GameJam.randomSeed.getRandomGenerator().ints(j + 64, j + modifier).findFirst().getAsInt();
-               planetFactory.createPlanet(this.world, randomX, randomY);
-               planetCount++;
+                      GameJam.randomSeed.getRandomGenerator().ints(j + minDistance, j + modifier).findFirst().getAsInt();
+                randomY = MathUtils.clamp(randomY, minDistance, GameJam.PLANET_VIEW_HEIGHT);
+                planetFactory.createPlanet(this.world, randomX, randomY);
+                planetCount++;
             }
             if (planetCount >= maxPlanets) {
                 //createBackgroundAnimationObjects();
