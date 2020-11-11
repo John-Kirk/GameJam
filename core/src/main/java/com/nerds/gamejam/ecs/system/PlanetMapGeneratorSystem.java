@@ -66,7 +66,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
         int solarYCenter = GameJam.PLANET_VIEW_HEIGHT / 2;
         int planetDist;
         for (int i = solarXCenter + 50; i < GameJam.PLANET_VIEW_WIDTH; i += planetDist) {
-            planetDist = GameJam.randomSeed.getRandomGenerator().nextInt(100) + 40;
+            planetDist = GameJam.randomSeed.getRandomGenerator().nextInt(100) + 30;
             planetFactory.createPlanet(this.world, i, i, solarXCenter);
         }
         createSun(solarXCenter, solarYCenter);
