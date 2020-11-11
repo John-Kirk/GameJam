@@ -14,6 +14,8 @@ import com.nerds.gamejam.ecs.component.FontComponent;
 import com.nerds.gamejam.ecs.component.LandmassComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.RenderableComponent;
+import com.nerds.gamejam.util.MathsUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +62,7 @@ public class PlanetFactory {
         sprites.add(new ColouredScaledSprite(SHADOW_TEXTURE, SHADOW_COLOUR, planetScale));
 
         //Pythagoras WOOT!
-        int solarDist = pythagoras(x - solarXCenter, y - solarXCenter);
+        int solarDist = MathsUtils.pythagoras(x - solarXCenter, y - solarXCenter);
 
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
@@ -70,10 +72,6 @@ public class PlanetFactory {
             .add(new CompositeSpriteComponent(sprites))
             .add(new CircleComponent(solarXCenter, solarXCenter, (int) (solarDist + planetOutline.getWidth())))
             .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
-    }
-
-    private int pythagoras(int a, int b) {
-        return (int) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
     }
 
     private boolean shouldBeDeathStar() {

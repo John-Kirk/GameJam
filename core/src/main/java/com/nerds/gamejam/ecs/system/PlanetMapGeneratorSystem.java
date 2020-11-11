@@ -11,6 +11,7 @@ import com.nerds.gamejam.ecs.component.AnimationComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.RenderableComponent;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
+import com.nerds.gamejam.util.MathsUtils;
 import com.nerds.gamejam.util.TextureRegionFactory;
 
 public class PlanetMapGeneratorSystem extends BaseSystem {
@@ -64,10 +65,13 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
     private void createSolarSystem() {
         int solarXCenter = GameJam.PLANET_VIEW_WIDTH / 2;
         int solarYCenter = GameJam.PLANET_VIEW_HEIGHT / 2;
-        int planetDist;
-        for (int i = solarXCenter + 50; i < GameJam.PLANET_VIEW_WIDTH; i += planetDist) {
-            planetDist = GameJam.randomSeed.getRandomGenerator().nextInt(100) + 30;
+        int orbitalReach = 0;
+        //TODO tidy up this horror
+        for (int i = solarXCenter + 50; orbitalReach * 2 < GameJam.PLANET_VIEW_WIDTH;) {
             planetFactory.createPlanet(this.world, i, i, solarXCenter);
+            int planetXDist = GameJam.randomSeed.getRandomGenerator().nextInt(75) + 30;
+            i += planetXDist;
+            orbitalReach = MathsUtils.pythagoras(i - solarXCenter, i - solarYCenter) + 24;//+24 due to expanding to planet size
         }
         createSun(solarXCenter, solarYCenter);
     }
