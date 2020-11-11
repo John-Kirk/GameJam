@@ -20,8 +20,10 @@ public class WorldBuilder {
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
                         new CameraSystem(),
                         new BackgroundRenderSystem(),
+                        new MovementSystem(),
                         new RenderSystem(),
-                        new PlanetViewGUISystem(game, menuScreen))
+                        new PlanetViewGUISystem(game, menuScreen),
+                        new MonsterControlSystem())
                 .build();
         return new World(worldConfiguration);
     }

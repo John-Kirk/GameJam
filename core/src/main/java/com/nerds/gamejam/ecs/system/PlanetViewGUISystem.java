@@ -2,12 +2,16 @@ package com.nerds.gamejam.ecs.system;
 
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.ecs.component.*;
+import com.nerds.gamejam.gameplay.character.Monster;
 import com.nerds.gamejam.screen.MenuScreen;
 
 public class PlanetViewGUISystem extends BaseSystem {
@@ -15,6 +19,8 @@ public class PlanetViewGUISystem extends BaseSystem {
     private final GameJam game;
     private final MenuScreen menuScreen;
     private Stage stage;
+    private static final Texture MONSTER_TEXTURE = new Texture("monster.png");
+
 
     public PlanetViewGUISystem(GameJam game, MenuScreen menuScreen) {
         this.game = game;
@@ -25,6 +31,18 @@ public class PlanetViewGUISystem extends BaseSystem {
     protected void initialize() {
         this.stage = new Stage();
         this.stage.addActor(createPauseButton());
+        addMonster();
+    }
+
+    private void addMonster() {
+        Sprite monsterSprite = new Sprite(MONSTER_TEXTURE);
+        monsterSprite.setSize(Monster.WIDTH, GameJam.PLANET_VIEW_HEIGHT);
+        this.world.createEntity().edit()
+                .add(new MonsterComponent())
+                .add(new PositionComponent(0, 0))
+                .add(new VelocityComponent(0, 0))
+                .add(new SpriteComponent(monsterSprite))
+                .add(RenderableComponent.INSTANCE);
     }
 
     private Button createPauseButton() {
