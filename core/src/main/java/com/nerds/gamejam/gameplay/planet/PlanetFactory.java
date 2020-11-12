@@ -54,15 +54,14 @@ public class PlanetFactory {
 
         float planetScale = GameJam.randomSeed.getRandomGenerator().nextFloat() + 0.5f;
         Array<Sprite> sprites = new Array<>(4);
-        ColouredScaledSprite planetOutline = new ColouredScaledSprite(OUTLINE_TEXTURE, Color.BLACK, planetScale);
-        sprites.add(planetOutline);
+        sprites.add(new ColouredScaledSprite(OUTLINE_TEXTURE, Color.BLACK, planetScale));
         sprites.add(new ColouredScaledSprite(BASE_TEXTURE, baseMaterial.getColor(), planetScale));
         sprites.add(new ColouredScaledSprite(LANDMASS_TEXTURES.get(landmass), secondaryMaterial.getColor(), planetScale));
         sprites.add(new ColouredScaledSprite(SHADOW_TEXTURE, SHADOW_COLOUR, planetScale));
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        double radius = farRightOrbitX + planetOutline.getWidth() - solarCenterX;
+        double radius = farRightOrbitX + sprites.get(0).getWidth() - solarCenterX;
         int x = solarCenterX + (int) (Math.cos(angle)*radius);
         int y = solarCenterY + (int) (Math.sin(angle)*radius);
 
