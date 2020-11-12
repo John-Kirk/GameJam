@@ -3,28 +3,35 @@ package com.nerds.gamejam.ecs.system;
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
 import com.nerds.gamejam.gameplay.character.Monster;
 import com.nerds.gamejam.screen.MenuScreen;
+import com.nerds.gamejam.util.TextureRegionFactory;
 
 public class PlanetViewGUISystem extends BaseSystem {
 
     private final GameJam game;
     private final MenuScreen menuScreen;
+    private final Array<TextureRegion> monsterTextureRegionArray;
     private Stage stage;
-    private static final Texture MONSTER_TEXTURE = new Texture("monster.png");
+    private static final Texture MONSTER_TEXTURE = new Texture("animation/monster_spritesheet.png");
 
 
     public PlanetViewGUISystem(GameJam game, MenuScreen menuScreen) {
         this.game = game;
         this.menuScreen = menuScreen;
+        this.monsterTextureRegionArray = TextureRegionFactory
+                .createTextureRegionArray(MONSTER_TEXTURE, Monster.WIDTH, GameJam.PLANET_VIEW_HEIGHT, 4);
     }
 
     @Override
@@ -41,7 +48,7 @@ public class PlanetViewGUISystem extends BaseSystem {
                 .add(new MonsterComponent())
                 .add(new PositionComponent(0, 0))
                 .add(new VelocityComponent(0, 0))
-                .add(new SpriteComponent(monsterSprite))
+                .add(new AnimationComponent(monsterTextureRegionArray, 5f, Animation.PlayMode.LOOP))
                 .add(RenderableComponent.INSTANCE);
     }
 
