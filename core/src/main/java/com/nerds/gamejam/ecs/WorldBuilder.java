@@ -17,7 +17,7 @@ public class WorldBuilder {
                 .with(new GroupManager(),
                         new TagManager(),
                         new BootstrapSystem(),
-                        new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
+                        new PlanetMapGeneratorSystem(new PlanetFactory()),
                         new CameraSystem(),
                         new BackgroundRenderSystem(),
                         new RenderSystem(),

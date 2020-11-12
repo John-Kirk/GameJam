@@ -14,7 +14,6 @@ import com.nerds.gamejam.ecs.component.FontComponent;
 import com.nerds.gamejam.ecs.component.LandmassComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.RenderableComponent;
-import com.nerds.gamejam.util.MathsUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class PlanetFactory {
         return textureMap;
     }
 
-    public void createPlanet(World world, int x, int y, int solarXCenter) {
+    public void createPlanet(World world, int farRightOrbitX, int solarCenterX, int solarCenterY) {
         Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
@@ -61,8 +60,11 @@ public class PlanetFactory {
         sprites.add(new ColouredScaledSprite(LANDMASS_TEXTURES.get(landmass), secondaryMaterial.getColor(), planetScale));
         sprites.add(new ColouredScaledSprite(SHADOW_TEXTURE, SHADOW_COLOUR, planetScale));
 
-        //Pythagoras WOOT!
-        int solarDist = MathsUtils.pythagoras(x - solarXCenter, y - solarXCenter);
+        // Set planet's initial position to a random location somewhere on its orbit
+        double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
+        double radius = farRightOrbitX + planetOutline.getWidth() - solarCenterX;
+        int x = solarCenterX + (int) (Math.cos(angle)*radius);
+        int y = solarCenterY + (int) (Math.sin(angle)*radius);
 
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
@@ -70,7 +72,7 @@ public class PlanetFactory {
             .add(RenderableComponent.INSTANCE)
             .add(new LandmassComponent(landmass))
             .add(new CompositeSpriteComponent(sprites))
-            .add(new CircleComponent(solarXCenter, solarXCenter, (int) (solarDist + planetOutline.getWidth())))
+            .add(new CircleComponent(solarCenterX, solarCenterY, (int) radius))
             .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
     }
 
