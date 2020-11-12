@@ -13,9 +13,12 @@ public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
 
+    public CameraSystem(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
         this.camera.zoom = 0.5f;
         setCameraBounds();
     }

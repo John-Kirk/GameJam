@@ -27,7 +27,7 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.world.setDelta(delta);
         this.world.process();
-        this.fpsLogger.log();
+//        this.fpsLogger.log();
     }
 
     @Override

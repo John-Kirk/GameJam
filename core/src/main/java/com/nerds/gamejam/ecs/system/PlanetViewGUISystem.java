@@ -14,16 +14,16 @@ public class PlanetViewGUISystem extends BaseSystem {
 
     private final GameJam game;
     private final MenuScreen menuScreen;
-    private Stage stage;
+    private final Stage stage;
 
-    public PlanetViewGUISystem(GameJam game, MenuScreen menuScreen) {
+    public PlanetViewGUISystem(GameJam game, MenuScreen menuScreen, Stage stage) {
         this.game = game;
         this.menuScreen = menuScreen;
+        this.stage = stage;
     }
 
     @Override
     protected void initialize() {
-        this.stage = new Stage();
         this.stage.addActor(createPauseButton());
     }
 
@@ -45,7 +45,6 @@ public class PlanetViewGUISystem extends BaseSystem {
 
     @Override
     protected void processSystem() {
-        Gdx.input.setInputProcessor(this.stage);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }

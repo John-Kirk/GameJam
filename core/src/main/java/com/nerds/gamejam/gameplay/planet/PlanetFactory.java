@@ -5,14 +5,12 @@ import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
-import com.nerds.gamejam.ecs.component.ColouredScaledSprite;
-import com.nerds.gamejam.ecs.component.CompositeSpriteComponent;
-import com.nerds.gamejam.ecs.component.FontComponent;
-import com.nerds.gamejam.ecs.component.LandmassComponent;
-import com.nerds.gamejam.ecs.component.PositionComponent;
-import com.nerds.gamejam.ecs.component.RenderableComponent;
+import com.nerds.gamejam.ecs.component.*;
+
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,12 +56,16 @@ public class PlanetFactory {
         sprites.add(new ColouredScaledSprite(SHADOW_TEXTURE, SHADOW_COLOUR, planetScale));
 
         Entity worldEntity = world.createEntity();
+        String planetName = nameFactory.generatePlanetName();
+        float radius = sprites.get(0).getWidth() / 2 * planetScale;
         worldEntity.edit()
               .add(new PositionComponent(x, y))
               .add(RenderableComponent.INSTANCE)
               .add(new LandmassComponent(landmass))
               .add(new CompositeSpriteComponent(sprites))
-              .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
+              .add(new FontComponent(planetName, x - 10, y - 10 ))
+              .add(new ClickableComponent((x1, y1, button) -> {System.out.println(planetName); return true;}))
+              .add(new BodyComponent(new Circle(x + radius, y + radius, radius)));
     }
 
     private boolean shouldBeDeathStar() {

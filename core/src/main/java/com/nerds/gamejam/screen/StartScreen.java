@@ -17,12 +17,10 @@ public class StartScreen extends ScreenAdapter {
 
     private final GameJam game;
     private final Stage stage;
-    private final GameScreen gameScreen;
 
     public StartScreen(GameJam game) {
         this.game = game;
         this.stage = new Stage();
-        this.gameScreen = new GameScreen(this.game);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class StartScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameJam.randomSeed.regenerateSeed();
-                game.setScreen(gameScreen);
+                game.setScreen(new GameScreen(game));
             }
         });
         return startButton;
