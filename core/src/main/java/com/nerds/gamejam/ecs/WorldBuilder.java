@@ -28,11 +28,10 @@ public class WorldBuilder {
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
                         new CameraSystem(orthographicCamera),
                         new BodyUpdateSystem(),
-                        new BackgroundRenderSystem(),
-                        new RenderSystem(),
+                        new BackgroundRenderSystem(orthographicCamera),
+                        new RenderSystem(orthographicCamera),
                         new PlanetViewGUISystem(game, menuScreen, new Stage()),
-                        inputHandlerSystem,
-                        new ShapeRenderSystem(orthographicCamera))
+                        inputHandlerSystem)
                 .build();
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();

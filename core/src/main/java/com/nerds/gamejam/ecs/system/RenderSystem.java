@@ -6,6 +6,8 @@ import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,6 +24,7 @@ import com.nerds.gamejam.ecs.component.SpriteComponent;
 @Wire
 public class RenderSystem extends IteratingSystem {
 
+    private final OrthographicCamera orthographicCamera;
     private ComponentMapper<CompositeSpriteComponent> compositeSpriteMapper;
     private ComponentMapper<SpriteComponent> spriteMapper;
     private ComponentMapper<PositionComponent> positionMapper;
@@ -31,8 +34,9 @@ public class RenderSystem extends IteratingSystem {
     private Batch batch;
     private BitmapFont font;
 
-    public RenderSystem() {
+    public RenderSystem(OrthographicCamera orthographicCamera) {
         super(Aspect.all(RenderableComponent.class));
+        this.orthographicCamera = orthographicCamera;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class RenderSystem extends IteratingSystem {
 
     @Override
     protected void begin() {
-        this.batch.setProjectionMatrix(cameraSystem.camera.combined);
+        this.batch.setProjectionMatrix(orthographicCamera.combined);
         this.batch.begin();
     }
 
@@ -98,7 +102,9 @@ public class RenderSystem extends IteratingSystem {
 
     private void drawSprite(Sprite sprite, PositionComponent positionComponent) {
         sprite.setPosition(positionComponent.x, positionComponent.y);
-        sprite.draw(this.batch);
+        Texture texture = sprite.getTexture();
+        batch.setColor(sprite.getColor());
+        batch.draw(texture, sprite.getX(), sprite.getY(), texture.getWidth() * sprite.getScaleX(), texture.getHeight() * sprite.getScaleY());
     }
 
     @Override

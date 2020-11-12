@@ -11,7 +11,7 @@ import com.nerds.gamejam.GameJam;
 @Wire
 public class CameraSystem extends BaseSystem {
 
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
 
     public CameraSystem(OrthographicCamera camera) {
         this.camera = camera;
