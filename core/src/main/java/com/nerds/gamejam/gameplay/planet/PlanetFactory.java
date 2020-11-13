@@ -2,10 +2,14 @@ package com.nerds.gamejam.gameplay.planet;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
@@ -58,13 +62,20 @@ public class PlanetFactory {
         Entity worldEntity = world.createEntity();
         String planetName = nameFactory.generatePlanetName();
         float radius = sprites.get(0).getWidth() / 2 * planetScale;
+        Material finalBaseMaterial = baseMaterial;
+        Material finalSecondaryMaterial = secondaryMaterial;
+        Landmass finalLandmass = landmass;
         worldEntity.edit()
               .add(new PositionComponent(x, y))
               .add(RenderableComponent.INSTANCE)
               .add(new LandmassComponent(landmass))
               .add(new CompositeSpriteComponent(sprites))
               .add(new FontComponent(planetName, x - 10, y - 10 ))
-              .add(new ClickableComponent((x1, y1, button) -> {System.out.println(planetName); return true;}))
+              .add(new ClickableComponent((x1, y1, x2, y2, button) -> {
+                  String desc = "A " + finalBaseMaterial.getDisplayName() + " planet, covered in " + finalSecondaryMaterial.getDisplayName() + " " + finalLandmass.getDisplayName() + " formations";
+                  worldEntity.edit().add(new SelectedPlanet(planetName, x, y, radius, desc));
+                  return true;
+              }))
               .add(new BodyComponent(new Circle(x + radius, y + radius, radius)));
     }
 

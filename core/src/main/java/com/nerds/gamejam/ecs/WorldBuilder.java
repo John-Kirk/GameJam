@@ -9,10 +9,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.*;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.system.*;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.screen.MenuScreen;
+import com.nerds.gamejam.util.PositionUtil;
 
 public class WorldBuilder {
 
@@ -28,10 +31,12 @@ public class WorldBuilder {
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
                         new CameraSystem(orthographicCamera),
                         new BodyUpdateSystem(),
+                        new PlanetSelectedSystem(new PositionUtil(orthographicCamera)),
                         new BackgroundRenderSystem(orthographicCamera),
                         new RenderSystem(orthographicCamera),
-                        new PlanetViewGUISystem(game, menuScreen, new Stage()),
-                        inputHandlerSystem)
+                        new PlanetViewGUISystem(game, menuScreen, stage),
+                        inputHandlerSystem,
+                        new ActorSystem(stage))
                 .build();
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();

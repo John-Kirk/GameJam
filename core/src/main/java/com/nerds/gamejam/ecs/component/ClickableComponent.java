@@ -17,6 +17,6 @@ public class ClickableComponent extends Component {
         return clickable;
     }
     public interface Clickable {
-        boolean onClick(float x, float y, int button);
+        boolean onClick(float worldX, float worldY, float screenX, float screenY, int button);
     }
 }
