@@ -19,6 +19,7 @@ public class WorldBuilder {
                         new BootstrapSystem(),
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
                         new CameraSystem(),
+                        new GameIntroSystem(),
                         new BackgroundRenderSystem(),
                         new MovementSystem(),
                         new RenderSystem(),
