@@ -78,6 +78,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
         super.dispose();
         nebula.dispose();
         vortex.dispose();
+        sun.dispose();
     }
 
 }
