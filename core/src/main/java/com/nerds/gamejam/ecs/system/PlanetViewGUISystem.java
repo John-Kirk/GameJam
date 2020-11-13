@@ -54,4 +54,8 @@ public class PlanetViewGUISystem extends BaseSystem {
         stage.dispose();
     }
 
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height);
+    }
+
 }

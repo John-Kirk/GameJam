@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.WorldBuilder;
+import com.nerds.gamejam.ecs.system.PlanetViewGUISystem;
 import com.nerds.gamejam.ecs.system.RenderSystem;
 
 public class GameScreen extends ScreenAdapter {
@@ -34,6 +35,9 @@ public class GameScreen extends ScreenAdapter {
     public void resize(int width, int height) {
         RenderSystem renderSystem = world.getSystem(RenderSystem.class);
         renderSystem.resize(width, height);
+
+        PlanetViewGUISystem planetViewGUISystem = world.getSystem(PlanetViewGUISystem.class);
+        planetViewGUISystem.resize(width, height);
     }
 
     @Override
