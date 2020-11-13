@@ -32,7 +32,7 @@ public class BootstrapSystem extends BaseSystem {
     protected void initialize() {
         super.initialize();
         this.monsterTextureRegionArray = TextureRegionFactory
-              .createTextureRegionArray(MONSTER_TEXTURE, Monster.WIDTH, GameJam.PLANET_VIEW_HEIGHT, 4);
+              .createTextureRegionArray(MONSTER_TEXTURE, Monster.WIDTH, Monster.HEIGHT, 4);
         this.world.createEntity().edit()
                 .add(new BackgroundComponent())
                 .add(new PositionComponent(0, 0))
