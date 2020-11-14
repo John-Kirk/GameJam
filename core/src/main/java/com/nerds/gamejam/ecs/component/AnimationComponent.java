@@ -7,15 +7,26 @@ import com.badlogic.gdx.utils.Array;
 
 public class AnimationComponent extends Component{
 
-    public Animation<TextureRegion> animation;
-    public float elapsedTime;
+    private String animationReference;
+    private float elapsedTime;
 
     public AnimationComponent() {
         //keep artemis happy
     }
 
-    public AnimationComponent(Array<TextureRegion> frames, float animationRuntime, Animation.PlayMode playMode) {
-        this.animation = new Animation<>(animationRuntime, frames, playMode);
+    public AnimationComponent(String animationReference) {
+        this.animationReference = animationReference;
     }
 
+    public String getAnimationReference() {
+        return animationReference;
+    }
+
+    public float getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(float elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
 }

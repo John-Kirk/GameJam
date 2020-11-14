@@ -5,24 +5,28 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.system.*;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.screen.MenuScreen;
+import com.nerds.gamejam.util.CachingTextureLoader;
 
 public class WorldBuilder {
 
     public static World build(GameJam game, MenuScreen menuScreen) {
+        CachingTextureLoader textureLoader = new CachingTextureLoader();
+        CameraSystem cameraSystem = new CameraSystem();
         WorldConfiguration worldConfiguration = new WorldConfigurationBuilder()
                 .with(new GroupManager(),
                         new TagManager(),
-                        new BootstrapSystem(),
+                        new BootstrapSystem(textureLoader),
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
-                        new CameraSystem(),
+                        cameraSystem,
+                        new AnimationUpdateSystem(textureLoader),
                         new GameIntroSystem(),
-                        new BackgroundRenderSystem(),
                         new MovementSystem(),
-                        new RenderSystem(),
+                        new RenderSystem(cameraSystem, textureLoader),
                         new PlanetViewGUISystem(game, menuScreen),
                         new MonsterControlSystem())
                 .build();

@@ -4,35 +4,31 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.nerds.gamejam.ecs.component.AnimationComponent;
-import com.nerds.gamejam.ecs.component.CompositeSpriteComponent;
-import com.nerds.gamejam.ecs.component.FontComponent;
-import com.nerds.gamejam.ecs.component.PositionComponent;
-import com.nerds.gamejam.ecs.component.RenderableComponent;
-import com.nerds.gamejam.ecs.component.SpriteComponent;
+import com.nerds.gamejam.ecs.component.*;
+import com.nerds.gamejam.util.TextureLoader;
 
 @Wire
 public class RenderSystem extends IteratingSystem {
 
-    private ComponentMapper<CompositeSpriteComponent> compositeSpriteMapper;
-    private ComponentMapper<SpriteComponent> spriteMapper;
     private ComponentMapper<PositionComponent> positionMapper;
+    private ComponentMapper<TextureReferenceComponent> textureReferenceMapper;
+    private ComponentMapper<ScaleComponent> scaleMapper;
+    private ComponentMapper<BodyComponent> bodyMapper;
     private ComponentMapper<FontComponent> fontMapper;
-    private ComponentMapper<AnimationComponent> animationMapper;
+    private final TextureLoader textureLoader;
     private CameraSystem cameraSystem;
     private Batch batch;
     private BitmapFont font;
 
-    public RenderSystem() {
-        super(Aspect.all(RenderableComponent.class));
+    public RenderSystem(CameraSystem cameraSystem, TextureLoader textureLoader) {
+        super(Aspect.all(PositionComponent.class, TextureReferenceComponent.class, BodyComponent.class));
+        this.textureLoader = textureLoader;
+        this.cameraSystem = cameraSystem;
     }
 
     @Override
@@ -49,18 +45,26 @@ public class RenderSystem extends IteratingSystem {
 
     @Override
     protected void process(int e) {
-        drawComposites(e);
-        drawSingleSprite(e);
-        drawFont(e);
-        drawAnimation(e);
-    }
+        PositionComponent position = positionMapper.get(e);
+        TextureReferenceComponent textureReference = textureReferenceMapper.get(e);
+        BodyComponent bodyComponent = bodyMapper.get(e);
+        ScaleComponent scaleComponent = scaleMapper.get(e);
 
-    private void drawSingleSprite(int e) {
-        SpriteComponent spriteComponent = this.spriteMapper.get(e);
-        if (spriteComponent != null) {
-            PositionComponent positionComponent = this.positionMapper.get(e);
-            drawSprite(spriteComponent.sprite, positionComponent);
-        }
+        float width = scaleComponent!= null ? bodyComponent.getWidth() * scaleComponent.getX() : bodyComponent.getWidth();
+        float height = scaleComponent != null ? bodyComponent.getHeight() * scaleComponent.getY() : bodyComponent.getHeight();
+
+        textureReference.getReferences().forEach(reference -> {
+            TextureRegion toDraw = textureLoader.getTexture(reference);
+            batch.setColor(reference.getColor());
+            if (reference.getTextureWrap() == null) {
+                batch.draw(toDraw, position.x, position.y, width, height);
+            } else {
+                batch.draw(toDraw, position.x, position.y, 0, 0, 0, 0, (int) width, (int) height, 0);
+
+            }
+        });
+
+        drawFont(e);
     }
 
     private void drawFont(int e) {
@@ -69,36 +73,6 @@ public class RenderSystem extends IteratingSystem {
             this.font.setColor(Color.WHITE);
             this.font.draw(this.batch, fontComponent.text, fontComponent.x, fontComponent.y);
         }
-    }
-
-    private void drawComposites(int e) {
-        PositionComponent positionComponent = this.positionMapper.get(e);
-        CompositeSpriteComponent compositeSpriteComponent = this.compositeSpriteMapper.get(e);
-        if (compositeSpriteComponent != null) {
-            for (int i = 0; i < compositeSpriteComponent.sprites.size; i++) {
-                Sprite sprite = compositeSpriteComponent.sprites.get(i);
-                drawSprite(sprite, positionComponent);
-            }
-        }
-    }
-
-    private void drawAnimation(int e) {
-        AnimationComponent animationComponent = animationMapper.get(e);
-        if (animationComponent != null) {
-            PositionComponent positionComponent = positionMapper.get(e);
-            animationComponent.elapsedTime += Gdx.graphics.getDeltaTime();
-            TextureRegion keyFrame = animationComponent.animation.getKeyFrame(animationComponent.elapsedTime);
-            this.batch.draw(keyFrame, positionComponent.x, positionComponent.y);
-            if (animationComponent.animation.getPlayMode() == Animation.PlayMode.NORMAL &&
-                  animationComponent.animation.isAnimationFinished(animationComponent.elapsedTime)) {
-                this.world.edit(e).remove(animationComponent);
-            }
-        }
-    }
-
-    private void drawSprite(Sprite sprite, PositionComponent positionComponent) {
-        sprite.setPosition(positionComponent.x, positionComponent.y);
-        sprite.draw(this.batch);
     }
 
     @Override
