@@ -6,8 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.util.InputUtil;
 
@@ -15,7 +14,7 @@ import com.nerds.gamejam.util.InputUtil;
 public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
-    ScalingViewport scalingViewport;
+    ExtendViewport scalingViewport;
 
     @Override
     protected void initialize() {
@@ -26,15 +25,14 @@ public class CameraSystem extends BaseSystem {
         float h = Gdx.graphics.getHeight();
         float worldWidth = GameJam.PLANET_VIEW_HEIGHT * w / h;
         int worldHeight = GameJam.PLANET_VIEW_HEIGHT;
-        scalingViewport = new FillViewport(worldWidth, worldHeight, camera);
-        scalingViewport.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        scalingViewport = new ExtendViewport(worldWidth, worldHeight, camera);
+        scalingViewport.update((int)w, (int)h);
         scalingViewport.apply();
         camera.position.add(worldWidth * -2f, worldHeight / -2f, 0);
     }
 
     protected void resize(int width, int height) {
-        scalingViewport.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        scalingViewport.apply();
+        scalingViewport.update(width, height);
         setCameraBounds();
     }
 
@@ -79,6 +77,11 @@ public class CameraSystem extends BaseSystem {
         } else if (InputUtil.isKeyPressed(Input.Keys.E)) {
             this.camera.zoom -= 1f * world.getDelta();
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+
+        }
+
         if (InputUtil.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }

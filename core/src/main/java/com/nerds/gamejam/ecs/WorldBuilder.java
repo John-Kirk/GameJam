@@ -5,7 +5,6 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.graphics.Texture;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.system.*;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
