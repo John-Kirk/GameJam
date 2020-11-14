@@ -24,7 +24,8 @@ public class WorldBuilder {
                         new MovementSystem(),
                         new RenderSystem(),
                         new PlanetViewGUISystem(game, menuScreen),
-                        new MonsterControlSystem())
+                        new MonsterControlSystem(),
+                        new OrbitalSystem())
                 .build();
         return new World(worldConfiguration);
     }

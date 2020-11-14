@@ -65,11 +65,15 @@ public class PlanetFactory {
         int x = solarCenterX + (int) (Math.cos(angle)*radius);
         int y = solarCenterY + (int) (Math.sin(angle)*radius);
 
+        double minOrbitalSpeed = 0.2;
+        double maxOrbitalSpeed = 1.4;
+        double orbitalSpeed = minOrbitalSpeed + GameJam.randomSeed.getRandomGenerator().nextDouble() * (maxOrbitalSpeed - minOrbitalSpeed);
+
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
             .add(new PositionComponent(x, y))
             .add(RenderableComponent.INSTANCE)
-            .add(new LandmassComponent(landmass))
+            .add(new LandmassComponent(landmass, angle, farRightOrbitX, orbitalSpeed))
             .add(new CompositeSpriteComponent(sprites))
             .add(new CircleComponent(solarCenterX, solarCenterY, (int) radius))
             .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
