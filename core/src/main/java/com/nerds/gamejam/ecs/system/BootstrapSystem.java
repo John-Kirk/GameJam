@@ -36,7 +36,7 @@ public class BootstrapSystem extends BaseSystem {
         this.world.createEntity().edit()
                 .add(new PositionComponent(0, 0))
                 .add(new BodyComponent(800, 600))
-                .add(new ScaleComponent(3, 3))
+                .add(new ScaleComponent(3.5f, 3.5f))
                 .add(new TextureReferenceComponent(Collections.singletonList(textureReference)));
                 addMonster();
     }

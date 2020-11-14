@@ -24,10 +24,12 @@ public class CameraSystem extends BaseSystem {
         this.camera.zoom = 1;
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        scalingViewport = new FillViewport(GameJam.PLANET_VIEW_HEIGHT * w / h, GameJam.PLANET_VIEW_HEIGHT, camera);
+        float worldWidth = GameJam.PLANET_VIEW_HEIGHT * w / h;
+        int worldHeight = GameJam.PLANET_VIEW_HEIGHT;
+        scalingViewport = new FillViewport(worldWidth, worldHeight, camera);
         scalingViewport.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         scalingViewport.apply();
-        camera.position.add(GameJam.PLANET_VIEW_HEIGHT / -2f * w / h, GameJam.PLANET_VIEW_HEIGHT / -2f, 0);
+        camera.position.add(worldWidth * -2f, worldHeight / -2f, 0);
     }
 
     protected void resize(int width, int height) {
