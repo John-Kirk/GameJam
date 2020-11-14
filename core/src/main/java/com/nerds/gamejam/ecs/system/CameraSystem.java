@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.util.InputUtil;
 
@@ -13,17 +15,24 @@ import com.nerds.gamejam.util.InputUtil;
 public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
+    ScalingViewport scalingViewport;
 
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
-        this.camera.zoom = 0.5f;
-        setCameraBounds();
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false);
+        this.camera.zoom = 1;
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        scalingViewport = new FillViewport(GameJam.PLANET_VIEW_HEIGHT * w / h, GameJam.PLANET_VIEW_HEIGHT, camera);
+        scalingViewport.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        scalingViewport.apply();
+        camera.position.add(GameJam.PLANET_VIEW_HEIGHT / -2f * w / h, GameJam.PLANET_VIEW_HEIGHT / -2f, 0);
     }
 
     protected void resize(int width, int height) {
-        camera.viewportHeight = height;
-        camera.viewportWidth = width;
+        scalingViewport.setScreenBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        scalingViewport.apply();
         setCameraBounds();
     }
 
@@ -47,6 +56,7 @@ public class CameraSystem extends BaseSystem {
         } else {
             camera.position.y = MathUtils.clamp(camera.position.y, min, max);
         }
+        this.scalingViewport.apply();
         this.camera.update();
     }
 
@@ -67,6 +77,10 @@ public class CameraSystem extends BaseSystem {
         } else if (InputUtil.isKeyPressed(Input.Keys.E)) {
             this.camera.zoom -= 1f * world.getDelta();
         }
+        if (InputUtil.isKeyPressed(Input.Keys.ESCAPE)) {
+            Gdx.app.exit();
+        }
+
         setCameraBounds();
     }
 }

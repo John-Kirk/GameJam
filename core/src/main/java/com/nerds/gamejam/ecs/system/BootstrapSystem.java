@@ -35,7 +35,8 @@ public class BootstrapSystem extends BaseSystem {
         textureReference.setTextureWrap(Texture.TextureWrap.Repeat);
         this.world.createEntity().edit()
                 .add(new PositionComponent(0, 0))
-                .add(new BodyComponent(GameJam.PLANET_VIEW_WIDTH, GameJam.PLANET_VIEW_HEIGHT))
+                .add(new BodyComponent(800, 600))
+                .add(new ScaleComponent(3, 3))
                 .add(new TextureReferenceComponent(Collections.singletonList(textureReference)));
                 addMonster();
     }

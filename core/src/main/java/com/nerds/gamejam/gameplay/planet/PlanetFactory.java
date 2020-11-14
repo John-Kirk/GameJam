@@ -3,17 +3,12 @@ package com.nerds.gamejam.gameplay.planet;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
 import com.nerds.gamejam.ecs.component.TextureReferenceComponent.TextureReference;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class PlanetFactory {
 
@@ -45,11 +40,11 @@ public class PlanetFactory {
 
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
-              .add(new PositionComponent(x, y))
-              .add(new BodyComponent(24, 24))
-              .add(new TextureReferenceComponent(layers))
-              .add(new ScaleComponent(planetScale, planetScale))
-              .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
+                .add(new PositionComponent(x, y))
+                .add(new BodyComponent(24, 24))
+                .add(new TextureReferenceComponent(layers))
+                .add(new ScaleComponent(planetScale, planetScale))
+                .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
     }
 
     private List<TextureReference> createTextureReferences(Material baseMaterial, Material secondaryMaterial, Landmass landmass) {
@@ -65,7 +60,7 @@ public class PlanetFactory {
         return GameJam.randomSeed.getRandomGenerator().nextInt(101) == 100;
     }
 
-    public <T extends Enum<?>> T randomEnum(Class<T> clazz){
+    public <T extends Enum<?>> T randomEnum(Class<T> clazz) {
         int x = GameJam.randomSeed.getRandomGenerator().nextInt(clazz.getEnumConstants().length);
         return clazz.getEnumConstants()[x];
     }

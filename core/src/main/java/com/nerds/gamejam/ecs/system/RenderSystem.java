@@ -56,12 +56,7 @@ public class RenderSystem extends IteratingSystem {
         textureReference.getReferences().forEach(reference -> {
             TextureRegion toDraw = textureLoader.getTexture(reference);
             batch.setColor(reference.getColor());
-            if (reference.getTextureWrap() == null) {
-                batch.draw(toDraw, position.x, position.y, width, height);
-            } else {
-                batch.draw(toDraw, position.x, position.y, 0, 0, 0, 0, (int) width, (int) height, 0);
-
-            }
+            batch.draw(toDraw, position.x, position.y, width, height);
         });
 
         drawFont(e);
