@@ -16,7 +16,7 @@ import com.nerds.gamejam.util.InputUtil;
 public class OrbitalSystem extends IteratingSystem {
 
     private ComponentMapper<PositionComponent> positionMapper;
-    private ComponentMapper<PlanetComponent> landmassMapper;
+    private ComponentMapper<PlanetComponent> planetMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<InMotionComponent> inMotionMapper;
 
@@ -27,7 +27,7 @@ public class OrbitalSystem extends IteratingSystem {
     @Override
     protected void process(int entityId) {
         PositionComponent positionComponent = positionMapper.get(entityId);
-        PlanetComponent planetComponent = landmassMapper.get(entityId);
+        PlanetComponent planetComponent = planetMapper.get(entityId);
         FontComponent fontComponent = fontMapper.get(entityId);
         InMotionComponent inMotionComponent = inMotionMapper.get(entityId);
 
