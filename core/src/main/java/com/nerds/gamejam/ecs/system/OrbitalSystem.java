@@ -13,7 +13,7 @@ import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.ScaleComponent;
 import com.nerds.gamejam.util.InputUtil;
 
-import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.MAX_PLANET_SIZE;
+import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.PLANET_SPIRTE_SIZE;
 
 @Wire
 public class OrbitalSystem extends IteratingSystem {
@@ -50,9 +50,9 @@ public class OrbitalSystem extends IteratingSystem {
                 planetComponent.orbitalAngle = planetComponent.orbitalAngle
                         + (planetComponent.orbitalSpeed * world.getDelta());
 
-                double orbitalRadius = planetComponent.orbitalDistance + 24 - solarCenterX;
-                int x = solarCenterX + (int) ((Math.cos(planetComponent.orbitalAngle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * scaleComponent.x));
-                int y = solarCenterY + (int) ((Math.sin(planetComponent.orbitalAngle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * scaleComponent.y));
+                double orbitalRadius = planetComponent.orbitalDistance + PLANET_SPIRTE_SIZE - solarCenterX;
+                int x = solarCenterX + (int) ((Math.cos(planetComponent.orbitalAngle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * scaleComponent.x));
+                int y = solarCenterY + (int) ((Math.sin(planetComponent.orbitalAngle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * scaleComponent.y));
                 positionComponent.x = x;
                 positionComponent.y = y;
                 fontComponent.x = x - 10;
