@@ -63,8 +63,8 @@ public class RenderSystem extends BaseEntitySystem {
 
     @Override
     protected void begin() {
-        this.batch.begin();
         this.batch.setProjectionMatrix(cameraSystem.camera.combined);
+        this.batch.begin();
         this.circleRenderer.setProjectionMatrix(cameraSystem.camera.combined);
         this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
     }
