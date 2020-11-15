@@ -57,7 +57,7 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
         Label label = new Label(selectedPlanet.desc, GameJam.skin);
         label.setWrap(true);
         planetPopup.getContentTable().add(label).fill().expand();
-        TextButton textButton = new TextButton("Go", GameJam.skin);
+        TextButton textButton = new TextButton(GameJam.gameStrings.get("goButton"), GameJam.skin);
         planetPopup.getButtonTable().add(textButton).expandX().padRight(5).align(Align.bottomRight);
         planetPopup.setKeepWithinStage(false);
         world.createEntity().edit().add(new ActorComponent(planetPopup));
