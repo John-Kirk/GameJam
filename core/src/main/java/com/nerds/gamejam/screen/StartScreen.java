@@ -12,15 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.actor.ScrollingBackground;
+import com.nerds.gamejam.util.CachingTextureLoader;
 
 public class StartScreen extends ScreenAdapter {
 
     private final GameJam game;
     private final Stage stage;
+    private final GameScreen gameScreen;
 
-    public StartScreen(GameJam game) {
+    public StartScreen(GameJam game, CachingTextureLoader cachingTextureLoader) {
         this.game = game;
         this.stage = new Stage();
+        this.gameScreen = new GameScreen(this.game, cachingTextureLoader);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class StartScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 GameJam.randomSeed.regenerateSeed();
-                game.setScreen(new GameScreen(game));
+                game.setScreen(gameScreen);
             }
         });
         return startButton;

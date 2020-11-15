@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.screen.MenuScreen;
+import com.nerds.gamejam.util.InputUtil;
 
 public class PlanetViewGUISystem extends BaseSystem {
 
@@ -36,7 +37,9 @@ public class PlanetViewGUISystem extends BaseSystem {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(menuScreen);
+                if (InputUtil.INPUT_ALLOWED) {
+                    game.setScreen(menuScreen);
+                }
             }
 
         });

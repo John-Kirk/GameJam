@@ -5,45 +5,29 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.*;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.system.*;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.screen.MenuScreen;
-import com.nerds.gamejam.util.PositionUtil;
+import com.nerds.gamejam.util.CachingTextureLoader;
 
 public class WorldBuilder {
 
-    public static World build(GameJam game, MenuScreen menuScreen) {
-        OrthographicCamera orthographicCamera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
-        Stage stage = new Stage();
-        InputHandlerSystem inputHandlerSystem = new InputHandlerSystem(orthographicCamera);
-
+    public static World build(GameJam game, MenuScreen menuScreen, CachingTextureLoader textureLoader) {
+        CameraSystem cameraSystem = new CameraSystem();
         WorldConfiguration worldConfiguration = new WorldConfigurationBuilder()
                 .with(new GroupManager(),
                         new TagManager(),
-                        new BootstrapSystem(),
+                        new BootstrapSystem(textureLoader),
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
-                        new CameraSystem(orthographicCamera),
-                        new BodyUpdateSystem(),
-                        new PlanetSelectedSystem(new PositionUtil(orthographicCamera)),
-                        new BackgroundRenderSystem(orthographicCamera),
-                        new RenderSystem(orthographicCamera),
-                        new PlanetViewGUISystem(game, menuScreen, stage),
-                        inputHandlerSystem,
-                        new ActorSystem(stage))
+                        cameraSystem,
+                        new AnimationUpdateSystem(textureLoader),
+                        new GameIntroSystem(),
+                        new MovementSystem(),
+                        new RenderSystem(textureLoader),
+                        new PlanetViewGUISystem(game, menuScreen),
+                        new MonsterControlSystem())
                 .build();
-
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(inputHandlerSystem);
-        inputMultiplexer.addProcessor(stage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
         return new World(worldConfiguration);
     }
 

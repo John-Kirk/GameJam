@@ -1,26 +1,59 @@
 package com.nerds.gamejam.ecs.system;
 
 import com.artemis.BaseSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.nerds.gamejam.ecs.component.BackgroundComponent;
-import com.nerds.gamejam.ecs.component.PositionComponent;
-import com.nerds.gamejam.ecs.component.SpriteComponent;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
+import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.ecs.component.*;
+import com.nerds.gamejam.util.CachingTextureLoader;
+import com.nerds.gamejam.util.TextureReference;
+import com.nerds.gamejam.gameplay.character.Monster;
+import com.nerds.gamejam.util.TextureRegionFactory;
+
+import static com.nerds.gamejam.ecs.component.TextureReferenceComponent.BACKGROUND;
 
 public class BootstrapSystem extends BaseSystem {
-    private static final Texture BACKGROUND_TEXTURE = new Texture("stars.png");
 
-    static {
-        BACKGROUND_TEXTURE.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+    private static final Texture MONSTER_TEXTURE = new Texture("animation/monster_spritesheet.png");
+    private Array<TextureRegion> monsterTextureRegionArray;
+
+    private CachingTextureLoader textureLoader;
+
+    public BootstrapSystem(CachingTextureLoader textureLoader) {
+        this.textureLoader = textureLoader;
     }
 
     @Override
     protected void initialize() {
         super.initialize();
+        this.monsterTextureRegionArray = TextureRegionFactory
+              .createTextureRegionArray(MONSTER_TEXTURE, Monster.WIDTH, Monster.HEIGHT, 4);
+        TextureReference textureReference = new TextureReference("stars.png", Color.WHITE);
+        textureReference.setTextureWrap(Texture.TextureWrap.Repeat);
+        TextureReferenceComponent textureReferenceComponent = new TextureReferenceComponent(textureReference);
+        textureReferenceComponent.layer = BACKGROUND;
         this.world.createEntity().edit()
-                .add(new BackgroundComponent())
                 .add(new PositionComponent(0, 0))
-                .add(new SpriteComponent(new Sprite(BACKGROUND_TEXTURE)));
+                .add(new BodyComponent(800, 600))
+                .add(new ScaleComponent(3.5f, 3.5f))
+                .add(textureReferenceComponent);
+                addMonster();
+    }
+
+    private void addMonster() {
+        Animation<TextureRegion> anim = new Animation<>(0.35f, monsterTextureRegionArray, Animation.PlayMode.LOOP);
+        String animRef = textureLoader.cacheAnimation(anim);
+
+        this.world.createEntity().edit()
+              .add(new MonsterComponent())
+              .add(new PositionComponent(-150, 0))
+              .add(new VelocityComponent(0, 0))
+              .add(new BodyComponent(Monster.WIDTH, GameJam.PLANET_VIEW_HEIGHT))
+              .add(new AnimationComponent(animRef))
+              .add(InMotionComponent.INSTANCE);
     }
 
     @Override

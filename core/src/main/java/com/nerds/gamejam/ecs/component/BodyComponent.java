@@ -1,20 +1,17 @@
 package com.nerds.gamejam.ecs.component;
 
 import com.artemis.Component;
-import com.badlogic.gdx.math.Shape2D;
 
 public class BodyComponent extends Component {
 
-    private Shape2D body;
+    public float width;
+    public float height;
 
-    public BodyComponent(Shape2D body) {
-        this.body = body;
+    public BodyComponent(float width, float height) {
+        this.width = width;
+        this.height = height;
     }
 
     public BodyComponent() {
-    }
-
-    public Shape2D getBody() {
-        return body;
     }
 }

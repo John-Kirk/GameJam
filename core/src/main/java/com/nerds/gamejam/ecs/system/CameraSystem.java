@@ -2,30 +2,25 @@ package com.nerds.gamejam.ecs.system;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.util.InputUtil;
 
 @Wire
 public class CameraSystem extends BaseSystem {
 
-    private OrthographicCamera camera;
-
-    public CameraSystem(OrthographicCamera camera) {
-        this.camera = camera;
-    }
+    OrthographicCamera camera;
 
     @Override
     protected void initialize() {
-        this.camera.zoom = 0.5f;
-        setCameraBounds();
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false);
+        this.camera.zoom = 1;
     }
 
     protected void resize(int width, int height) {
-        camera.viewportHeight = height;
-        camera.viewportWidth = width;
         setCameraBounds();
     }
 
@@ -54,21 +49,22 @@ public class CameraSystem extends BaseSystem {
 
     @Override
     protected void processSystem() {
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (InputUtil.isKeyPressed(Input.Keys.D)) {
             this.camera.position.x += 200 * world.getDelta();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        } else if (InputUtil.isKeyPressed(Input.Keys.A)) {
             this.camera.position.x -= 200 * world.getDelta();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (InputUtil.isKeyPressed(Input.Keys.W)) {
             this.camera.position.y += 200 * world.getDelta();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if (InputUtil.isKeyPressed(Input.Keys.S)) {
             this.camera.position.y -= 200 * world.getDelta();
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+        if (InputUtil.isKeyPressed(Input.Keys.Q)) {
             this.camera.zoom += 1f * world.getDelta();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+        } else if (InputUtil.isKeyPressed(Input.Keys.E)) {
             this.camera.zoom -= 1f * world.getDelta();
         }
+
         setCameraBounds();
     }
 }
