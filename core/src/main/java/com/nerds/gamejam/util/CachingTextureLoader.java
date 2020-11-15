@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.nerds.gamejam.ecs.component.AnimationComponent;
-import com.nerds.gamejam.ecs.component.TextureReferenceComponent.TextureReference;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CachingTextureLoader implements TextureLoader {
+public class CachingTextureLoader {
 
     private Map<String, TextureRegion> textureMap;
     private Map<String, Animation<TextureRegion>> animationMap;
@@ -21,7 +21,6 @@ public class CachingTextureLoader implements TextureLoader {
         this.animationMap = new HashMap<>();
     }
 
-    @Override
     public TextureRegion getTexture(TextureReference reference) {
         if (!textureMap.containsKey(reference.getReference())) {
             Texture texture = new Texture(reference.getReference());
@@ -36,23 +35,24 @@ public class CachingTextureLoader implements TextureLoader {
         return textureMap.get(reference.getReference());
     }
 
-    @Override
+    public void cacheTexture(String reference, TextureRegion textureRegion) {
+        textureMap.put(reference, textureRegion);
+    }
+
     public String cacheAnimation(Animation<TextureRegion> animation) {
         String uuid = UUID.randomUUID().toString();
         animationMap.put(uuid, animation);
         return uuid;
     }
 
-    @Override
-    public boolean updateAnimation(AnimationComponent animationComponent) {
+    public Animation<TextureRegion> getAnimation(String reference) {
+        return animationMap.get(reference);
+    }
 
-        String animationReference = animationComponent.getAnimationReference();
-        float elapsedTime = animationComponent.getElapsedTime();
-        Animation<TextureRegion> animation = animationMap.get(animationReference);
-        TextureRegion currentFrame = animation.getKeyFrame(elapsedTime);
-        textureMap.put(animationReference, currentFrame);
-
-        return animation.getPlayMode() == Animation.PlayMode.NORMAL &&
-                animation.isAnimationFinished(elapsedTime);
+    public void dispose() {
+        textureMap.forEach((s, textureRegion) -> textureRegion.getTexture().dispose());
+        animationMap.forEach((s, textureRegionAnimation) ->
+                Arrays.stream(textureRegionAnimation.getKeyFrames()).forEach(textureRegion ->
+                        textureRegion.getTexture().dispose()));
     }
 }

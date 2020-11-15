@@ -5,7 +5,7 @@ import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
-import com.nerds.gamejam.ecs.component.TextureReferenceComponent.TextureReference;
+import com.nerds.gamejam.util.TextureReference;
 
 import java.util.LinkedList;
 import java.util.List;

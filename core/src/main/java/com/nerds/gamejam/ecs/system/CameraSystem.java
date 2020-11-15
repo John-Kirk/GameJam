@@ -2,11 +2,9 @@ package com.nerds.gamejam.ecs.system;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.viewport.*;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.util.InputUtil;
 
@@ -14,25 +12,15 @@ import com.nerds.gamejam.util.InputUtil;
 public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
-    ExtendViewport scalingViewport;
 
     @Override
     protected void initialize() {
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false);
         this.camera.zoom = 1;
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        float worldWidth = GameJam.PLANET_VIEW_HEIGHT * w / h;
-        int worldHeight = GameJam.PLANET_VIEW_HEIGHT;
-        scalingViewport = new ExtendViewport(worldWidth, worldHeight, camera);
-        scalingViewport.update((int)w, (int)h);
-        scalingViewport.apply();
-        camera.position.add(worldWidth * -2f, worldHeight / -2f, 0);
     }
 
     protected void resize(int width, int height) {
-        scalingViewport.update(width, height);
         setCameraBounds();
     }
 
@@ -56,7 +44,6 @@ public class CameraSystem extends BaseSystem {
         } else {
             camera.position.y = MathUtils.clamp(camera.position.y, min, max);
         }
-        this.scalingViewport.apply();
         this.camera.update();
     }
 
@@ -76,14 +63,6 @@ public class CameraSystem extends BaseSystem {
             this.camera.zoom += 1f * world.getDelta();
         } else if (InputUtil.isKeyPressed(Input.Keys.E)) {
             this.camera.zoom -= 1f * world.getDelta();
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-
-        }
-
-        if (InputUtil.isKeyPressed(Input.Keys.ESCAPE)) {
-            Gdx.app.exit();
         }
 
         setCameraBounds();

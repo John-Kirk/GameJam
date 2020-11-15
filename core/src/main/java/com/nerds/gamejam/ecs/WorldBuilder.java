@@ -13,8 +13,7 @@ import com.nerds.gamejam.util.CachingTextureLoader;
 
 public class WorldBuilder {
 
-    public static World build(GameJam game, MenuScreen menuScreen) {
-        CachingTextureLoader textureLoader = new CachingTextureLoader();
+    public static World build(GameJam game, MenuScreen menuScreen, CachingTextureLoader textureLoader) {
         CameraSystem cameraSystem = new CameraSystem();
         WorldConfiguration worldConfiguration = new WorldConfigurationBuilder()
                 .with(new GroupManager(),
@@ -25,7 +24,7 @@ public class WorldBuilder {
                         new AnimationUpdateSystem(textureLoader),
                         new GameIntroSystem(),
                         new MovementSystem(),
-                        new RenderSystem(cameraSystem, textureLoader),
+                        new RenderSystem(textureLoader),
                         new PlanetViewGUISystem(game, menuScreen),
                         new MonsterControlSystem())
                 .build();

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.WorldBuilder;
 import com.nerds.gamejam.ecs.system.RenderSystem;
+import com.nerds.gamejam.util.CachingTextureLoader;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -15,9 +16,9 @@ public class GameScreen extends ScreenAdapter {
     private final World world;
     private final FPSLogger fpsLogger;
 
-    public GameScreen(GameJam game) {
+    public GameScreen(GameJam game, CachingTextureLoader cachingTextureLoader) {
         this.game = game;
-        this.world = WorldBuilder.build(game, new MenuScreen(game, this));
+        this.world = WorldBuilder.build(game, new MenuScreen(game, this), cachingTextureLoader);
         this.fpsLogger = new FPSLogger();
     }
 

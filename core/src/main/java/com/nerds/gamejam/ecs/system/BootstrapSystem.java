@@ -8,21 +8,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
-import com.nerds.gamejam.ecs.component.TextureReferenceComponent.TextureReference;
+import com.nerds.gamejam.util.CachingTextureLoader;
+import com.nerds.gamejam.util.TextureReference;
 import com.nerds.gamejam.gameplay.character.Monster;
-import com.nerds.gamejam.util.TextureLoader;
 import com.nerds.gamejam.util.TextureRegionFactory;
 
-import java.util.Collections;
+import static com.nerds.gamejam.ecs.component.TextureReferenceComponent.BACKGROUND;
 
 public class BootstrapSystem extends BaseSystem {
 
     private static final Texture MONSTER_TEXTURE = new Texture("animation/monster_spritesheet.png");
     private Array<TextureRegion> monsterTextureRegionArray;
 
-    private TextureLoader textureLoader;
+    private CachingTextureLoader textureLoader;
 
-    public BootstrapSystem(TextureLoader textureLoader) {
+    public BootstrapSystem(CachingTextureLoader textureLoader) {
         this.textureLoader = textureLoader;
     }
 
@@ -33,11 +33,13 @@ public class BootstrapSystem extends BaseSystem {
               .createTextureRegionArray(MONSTER_TEXTURE, Monster.WIDTH, Monster.HEIGHT, 4);
         TextureReference textureReference = new TextureReference("stars.png", Color.WHITE);
         textureReference.setTextureWrap(Texture.TextureWrap.Repeat);
+        TextureReferenceComponent textureReferenceComponent = new TextureReferenceComponent(textureReference);
+        textureReferenceComponent.layer = BACKGROUND;
         this.world.createEntity().edit()
                 .add(new PositionComponent(0, 0))
                 .add(new BodyComponent(800, 600))
                 .add(new ScaleComponent(3.5f, 3.5f))
-                .add(new TextureReferenceComponent(Collections.singletonList(textureReference)));
+                .add(textureReferenceComponent);
                 addMonster();
     }
 
