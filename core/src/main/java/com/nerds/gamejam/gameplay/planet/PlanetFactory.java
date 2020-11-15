@@ -12,7 +12,7 @@ import com.nerds.gamejam.util.TextureReference;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.MAX_PLANET_SIZE;
+import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.PLANET_SPIRTE_SIZE;
 
 public class PlanetFactory {
 
@@ -43,14 +43,14 @@ public class PlanetFactory {
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        double orbitalRadius = farRightOrbitX + 24 - solarCenterX; //get sprite width how?
-        int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * planetScale));
-        int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * planetScale));
+        double orbitalRadius = farRightOrbitX + PLANET_SPIRTE_SIZE - solarCenterX;
+        int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
+        int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
 
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
                 .add(new PositionComponent(x, y))
-                .add(new BodyComponent(24, 24))
+                .add(new BodyComponent(PLANET_SPIRTE_SIZE, PLANET_SPIRTE_SIZE))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
                 .add(new CircleComponent(solarCenterX, solarCenterY, (int) orbitalRadius))

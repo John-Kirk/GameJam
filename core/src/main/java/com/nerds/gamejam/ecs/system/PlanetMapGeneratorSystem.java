@@ -17,7 +17,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
 
     private final PlanetFactory planetFactory;
     private final CachingTextureLoader textureLoader;
-    public static final int MAX_PLANET_SIZE = 24;
+    public static final int PLANET_SPIRTE_SIZE = 24;
     private static final Texture nebula = new Texture("animation/12_nebula_spritesheet.png");
     private static final Texture vortex = new Texture("animation/13_vortex_spritesheet.png");
     private static final Texture sun = new Texture("animation/16_sunburn_spritesheet.png");
@@ -45,7 +45,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
             planetFactory.createPlanet(this.world, farRightOrbitX, solarCenterX, solarCenterY);
             int xDistFromPrevious = GameJam.randomSeed.getRandomGenerator().nextInt(75) + 30;
             farRightOrbitX += xDistFromPrevious;
-            orbitalDistance = farRightOrbitX - solarCenterX + MAX_PLANET_SIZE;
+            orbitalDistance = farRightOrbitX - solarCenterX + PLANET_SPIRTE_SIZE;
         } while (orbitalDistance * 2 < GameJam.PLANET_VIEW_WIDTH && orbitalDistance * 2 < GameJam.PLANET_VIEW_HEIGHT);
         createSun(solarCenterX, solarCenterY);
     }
