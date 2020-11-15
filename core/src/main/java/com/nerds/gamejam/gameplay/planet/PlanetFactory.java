@@ -20,8 +20,7 @@ public class PlanetFactory {
     private static final Color SHADOW_COLOUR = new Color(0, 0, 0, 0.3f);
     private final PlanetNameFactory nameFactory = new PlanetNameFactory();
 
-    public void createPlanet(World world, int x, int y) {
-        Material baseMaterial = randomEnum(Material.class);
+    public void createPlanet(World world, int farRightOrbitX, int solarCenterX, int solarCenterY) {        Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
             secondaryMaterial = randomEnum(Material.class);
@@ -42,7 +41,7 @@ public class PlanetFactory {
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        double radius = farRightOrbitX + sprites.get(0).getWidth() - solarCenterX;
+        double radius = farRightOrbitX + 24 - solarCenterX; //get sprite width how?
         int x = solarCenterX + (int) (Math.cos(angle)*radius);
         int y = solarCenterY + (int) (Math.sin(angle)*radius);
 
