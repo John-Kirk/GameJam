@@ -55,7 +55,7 @@ public class PlanetFactory {
                 .add(new ScaleComponent(planetScale, planetScale))
                 .add(new FontComponent(planetName, x - 10, y - 10))
                 .add(new ClickableComponent((worldX, worldY, screenX, screenY, button) -> {
-                    String desc = "A " + finalBaseMaterial.getDisplayName() + " planet, covered in " + finalSecondaryMaterial.getDisplayName() + " " + finalLandmass.getDisplayName() + " formations";
+                    String desc = String.format(GameJam.gameStrings.get("planetDescription"), GameJam.gameStrings.get(finalBaseMaterial.name().toLowerCase()), GameJam.gameStrings.get(finalLandmass.name().toLowerCase()), GameJam.gameStrings.get(finalSecondaryMaterial.name().toLowerCase()));
                     worldEntity.edit().add(new SelectedPlanet(planetName, x, y, radius, desc));
                     return true;
                 }));

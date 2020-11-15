@@ -7,8 +7,4 @@ public enum Landmass {
     public String getFileName() {
         return "planet/" + toString().toLowerCase() + ".png";
     }
-
-    public String getDisplayName() {
-        return toString().toLowerCase().replace("_", " ");
-    }
 }
