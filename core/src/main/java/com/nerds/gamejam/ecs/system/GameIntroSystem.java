@@ -33,9 +33,9 @@ public class GameIntroSystem extends IteratingSystem {
 
     @Override
     protected void process(int e) {
-        cameraSystem.camera.zoom += 0.05f * this.world.getDelta();
-        if (cameraCurrentlyZooming && cameraSystem.camera.zoom >= 0.5f) {
-            cameraSystem.camera.zoom = 0.5f;
+        cameraSystem.camera.zoom += 0.1f * this.world.getDelta();
+        if (cameraCurrentlyZooming && cameraSystem.camera.zoom >= 1f) {
+            cameraSystem.camera.zoom = 1f;
             cameraCurrentlyZooming = false;
             beginMonsterMovement(e);
         } else if (inMotionComponentComponentMapper.get(e) == null) {
