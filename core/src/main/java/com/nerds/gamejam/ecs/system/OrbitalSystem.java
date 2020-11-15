@@ -45,9 +45,9 @@ public class OrbitalSystem extends IteratingSystem {
                 planetComponent.orbitalAngle = planetComponent.orbitalAngle
                         + (planetComponent.orbitalSpeed * world.getDelta());
 
-                double radius = planetComponent.orbitalDistance + 24 - solarCenterX;
-                int x = solarCenterX + (int) (Math.cos(planetComponent.orbitalAngle) * radius);
-                int y = solarCenterY + (int) (Math.sin(planetComponent.orbitalAngle) * radius);
+                double orbitalRadius = planetComponent.orbitalDistance + 24 - solarCenterX;
+                int x = solarCenterX + (int) (Math.cos(planetComponent.orbitalAngle) * orbitalRadius);
+                int y = solarCenterY + (int) (Math.sin(planetComponent.orbitalAngle) * orbitalRadius);
                 positionComponent.x = x;
                 positionComponent.y = y;
                 fontComponent.x = x - 10;

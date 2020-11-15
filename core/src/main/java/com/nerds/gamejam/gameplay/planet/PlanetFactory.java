@@ -41,9 +41,9 @@ public class PlanetFactory {
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        double radius = farRightOrbitX + 24 - solarCenterX; //get sprite width how?
-        int x = solarCenterX + (int) (Math.cos(angle)*radius);
-        int y = solarCenterY + (int) (Math.sin(angle)*radius);
+        double orbitalRadius = farRightOrbitX + 24 - solarCenterX; //get sprite width how?
+        int x = solarCenterX + (int) (Math.cos(angle)*orbitalRadius);
+        int y = solarCenterY + (int) (Math.sin(angle)*orbitalRadius);
 
         double minOrbitalSpeed = 0.2;
         double maxOrbitalSpeed = 1.4;
@@ -59,7 +59,7 @@ public class PlanetFactory {
                 .add(new PlanetComponent(angle, farRightOrbitX, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
-                .add(new CircleComponent(solarCenterX, solarCenterY, (int) radius))
+                .add(new CircleComponent(solarCenterX, solarCenterY, (int) orbitalRadius))
                 .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
     }
 
