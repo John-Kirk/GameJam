@@ -53,8 +53,8 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
         }
 
         SelectedPlanet selectedPlanet = selectedPlanetComponentMapper.get(entityId);
-        planetPopup = new Dialog(selectedPlanet.getName(), GameJam.skin);
-        Label label = new Label(selectedPlanet.getDesc(), GameJam.skin);
+        planetPopup = new Dialog(selectedPlanet.name, GameJam.skin);
+        Label label = new Label(selectedPlanet.desc, GameJam.skin);
         label.setWrap(true);
         planetPopup.getContentTable().add(label).fill().expand();
         TextButton textButton = new TextButton("Go", GameJam.skin);
@@ -66,11 +66,11 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
     private void positionPopup(int entityId) {
         SelectedPlanet selectedPlanet = selectedPlanetComponentMapper.get(entityId);
 
-        Vector2 v = positionUtil.toWorldPosition(new Vector2(selectedPlanet.getX(), selectedPlanet.getY()));
+        Vector2 v = positionUtil.toWorldPosition(new Vector2(selectedPlanet.x, selectedPlanet.y));
 
         float x = v.x;
         float y = v.y;
-        float radius = selectedPlanet.getRadius();
+        float radius = selectedPlanet.radius;
 
         if (planetPopup != null) {
             planetPopup.setPosition(x + radius * 4 + 10, y - planetPopup.getHeight() / 2);

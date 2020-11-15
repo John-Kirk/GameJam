@@ -64,7 +64,7 @@ public class InputHandlerSystem extends BaseEntitySystem implements InputProcess
             Shape2D body = bodyComponent.physicalBody;
 
             if (body.contains(worldX, worldY)) {
-                if (clickableComponent.getClickable().onClick(worldX, worldY, screenX, screenY, button)) {
+                if (clickableComponent.clickable.onClick(worldX, worldY, screenX, screenY, button)) {
                     return true;
                 }
             }

@@ -1,22 +1,16 @@
 package com.nerds.gamejam.ecs.component;
 
 import com.artemis.Component;
+import com.nerds.gamejam.util.Clickable;
 
 public class ClickableComponent extends Component {
 
-    private Clickable clickable;
+    public Clickable clickable;
 
     public ClickableComponent(Clickable clickable) {
         this.clickable = clickable;
     }
 
     public ClickableComponent() {
-    }
-
-    public Clickable getClickable() {
-        return clickable;
-    }
-    public interface Clickable {
-        boolean onClick(float worldX, float worldY, float screenX, float screenY, int button);
     }
 }

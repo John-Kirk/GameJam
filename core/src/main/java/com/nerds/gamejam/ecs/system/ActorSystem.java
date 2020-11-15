@@ -26,12 +26,12 @@ public class ActorSystem extends BaseEntitySystem {
     @Override
     protected void inserted(int entityId) {
         ActorComponent actorComponent = actorComponentComponentMapper.get(entityId);
-        stage.addActor(actorComponent.getActor());
+        stage.addActor(actorComponent.actor);
     }
 
     @Override
     protected void removed(int entityId) {
         ActorComponent actorComponent = actorComponentComponentMapper.get(entityId);
-        actorComponent.getActor().remove();
+        actorComponent.actor.remove();
     }
 }
