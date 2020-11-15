@@ -2,7 +2,6 @@ package com.nerds.gamejam.ecs.system;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,14 +15,12 @@ public class CameraSystem extends BaseSystem {
 
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera(512, GameJam.PLANET_VIEW_HEIGHT);
-        this.camera.zoom = 0.5f;
-        setCameraBounds();
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false);
+        this.camera.zoom = 1;
     }
 
     protected void resize(int width, int height) {
-        camera.viewportHeight = height;
-        camera.viewportWidth = width;
         setCameraBounds();
     }
 
@@ -67,6 +64,7 @@ public class CameraSystem extends BaseSystem {
         } else if (InputUtil.isKeyPressed(Input.Keys.E)) {
             this.camera.zoom -= 1f * world.getDelta();
         }
+
         setCameraBounds();
     }
 }

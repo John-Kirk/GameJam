@@ -7,28 +7,27 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.AnimationComponent;
+import com.nerds.gamejam.ecs.component.BodyComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
-import com.nerds.gamejam.ecs.component.RenderableComponent;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
+import com.nerds.gamejam.util.CachingTextureLoader;
 import com.nerds.gamejam.util.TextureRegionFactory;
 
 public class PlanetMapGeneratorSystem extends BaseSystem {
 
     private final PlanetFactory planetFactory;
+    private final CachingTextureLoader textureLoader;
     private static final int MAX_PLANET_SIZE = 24;
     private static final Texture nebula = new Texture("animation/12_nebula_spritesheet.png");
     private static final Texture vortex = new Texture("animation/13_vortex_spritesheet.png");
     private static final Texture sun = new Texture("animation/16_sunburn_spritesheet.png");
-    private final Array<TextureRegion> nebulaTextureRegionArray;
-    private final Array<TextureRegion> vortexTextureRegionArray;
     private final Array<TextureRegion> sunTextureRegionArray;
 
     private static final int ANIMATED_TEXTURE_SIZE = 192;
 
-    public PlanetMapGeneratorSystem(PlanetFactory planetFactory) {
+    public PlanetMapGeneratorSystem(PlanetFactory planetFactory, CachingTextureLoader textureLoader) {
         this.planetFactory = planetFactory;
-        this.nebulaTextureRegionArray = TextureRegionFactory.createTextureRegionArray(nebula, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
-        this.vortexTextureRegionArray = TextureRegionFactory.createTextureRegionArray(vortex, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
+        this.textureLoader = textureLoader;
         this.sunTextureRegionArray = TextureRegionFactory.createTextureRegionArray(sun, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
     }
 
@@ -52,18 +51,12 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
     }
 
     private void createSun(int solarCenterX, int solarCenterY) {
-        this.world.createEntity().edit().add(new PositionComponent(solarCenterX - ANIMATED_TEXTURE_SIZE/2, solarCenterY - ANIMATED_TEXTURE_SIZE/2))
-                .add(new AnimationComponent(sunTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
-                .add(RenderableComponent.INSTANCE);
-    }
+        Animation<TextureRegion> animation = new Animation<>(0.06f, sunTextureRegionArray, Animation.PlayMode.LOOP);
+        String animationReference = textureLoader.cacheAnimation(animation);
 
-    private void createBackgroundAnimationObjects() {
-        this.world.createEntity().edit().add(new PositionComponent(20, 300))
-              .add(new AnimationComponent(nebulaTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
-              .add(RenderableComponent.INSTANCE);
-        this.world.createEntity().edit().add(new PositionComponent(125, GameJam.PLANET_VIEW_HEIGHT/4))
-              .add(new AnimationComponent(vortexTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
-              .add(RenderableComponent.INSTANCE);
+        this.world.createEntity().edit().add(new PositionComponent(solarCenterX - ANIMATED_TEXTURE_SIZE/2, solarCenterY - ANIMATED_TEXTURE_SIZE/2))
+            .add(new AnimationComponent(animationReference))
+            .add(new BodyComponent(ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE));
     }
 
     @Override

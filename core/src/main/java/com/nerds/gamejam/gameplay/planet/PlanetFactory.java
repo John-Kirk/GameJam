@@ -3,40 +3,24 @@ package com.nerds.gamejam.gameplay.planet;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.CircleComponent;
-import com.nerds.gamejam.ecs.component.ColouredScaledSprite;
-import com.nerds.gamejam.ecs.component.CompositeSpriteComponent;
-import com.nerds.gamejam.ecs.component.FontComponent;
-import com.nerds.gamejam.ecs.component.LandmassComponent;
-import com.nerds.gamejam.ecs.component.PositionComponent;
-import com.nerds.gamejam.ecs.component.RenderableComponent;
+import com.nerds.gamejam.ecs.component.*;
+import com.nerds.gamejam.util.TextureReference;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class PlanetFactory {
 
-    private static final Texture BASE_TEXTURE = new Texture("planet/base.png");
-    private static final Texture SHADOW_TEXTURE = new Texture("planet/shadow.png");
-    private static final Texture OUTLINE_TEXTURE = new Texture("planet/outline.png");
-    private static final Map<Landmass, Texture> LANDMASS_TEXTURES = createLandmassTextures();
+    private static final String PLANET_OUTLINE = "planet/outline.png";
+    private static final String PLANET_BASE = "planet/base.png";
+    private static final String PLANET_SHADOW = "planet/shadow.png";
     private static final Color SHADOW_COLOUR = new Color(0, 0, 0, 0.3f);
     private final PlanetNameFactory nameFactory = new PlanetNameFactory();
 
-    private static Map<Landmass, Texture> createLandmassTextures() {
-        Map<Landmass, Texture> textureMap = new HashMap<>();
-        for (Landmass landmass : Landmass.values()) {
-            textureMap.put(landmass, new Texture(landmass.getFileName()));
-        }
-        return textureMap;
-    }
-
-    public void createPlanet(World world, int farRightOrbitX, int solarCenterX, int solarCenterY) {
-        Material baseMaterial = randomEnum(Material.class);
+    public void createPlanet(World world, int farRightOrbitX, int solarCenterX, int solarCenterY) {        Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
             secondaryMaterial = randomEnum(Material.class);
@@ -53,15 +37,11 @@ public class PlanetFactory {
         }
 
         float planetScale = GameJam.randomSeed.getRandomGenerator().nextFloat() + 0.5f;
-        Array<Sprite> sprites = new Array<>(4);
-        sprites.add(new ColouredScaledSprite(OUTLINE_TEXTURE, Color.BLACK, planetScale));
-        sprites.add(new ColouredScaledSprite(BASE_TEXTURE, baseMaterial.getColor(), planetScale));
-        sprites.add(new ColouredScaledSprite(LANDMASS_TEXTURES.get(landmass), secondaryMaterial.getColor(), planetScale));
-        sprites.add(new ColouredScaledSprite(SHADOW_TEXTURE, SHADOW_COLOUR, planetScale));
+        List<TextureReference> layers = createTextureReferences(baseMaterial, secondaryMaterial, landmass);
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        double radius = farRightOrbitX + sprites.get(0).getWidth() - solarCenterX;
+        double radius = farRightOrbitX + 24 - solarCenterX; //get sprite width how?
         int x = solarCenterX + (int) (Math.cos(angle)*radius);
         int y = solarCenterY + (int) (Math.sin(angle)*radius);
 
@@ -71,21 +51,30 @@ public class PlanetFactory {
 
         Entity worldEntity = world.createEntity();
         worldEntity.edit()
-            .add(new PositionComponent(x, y))
-            .add(RenderableComponent.INSTANCE)
-            .add(new LandmassComponent(landmass, angle, farRightOrbitX, orbitalSpeed))
-            .add(new CompositeSpriteComponent(sprites))
-            .add(new CircleComponent(solarCenterX, solarCenterY, (int) radius))
-            .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10 ));
+                .add(new PositionComponent(x, y))
+                .add(new BodyComponent(24, 24))
+                //            .add(new LandmassComponent(landmass, angle, farRightOrbitX, orbitalSpeed))
+                .add(new TextureReferenceComponent(layers))
+                .add(new ScaleComponent(planetScale, planetScale))
+                .add(new CircleComponent(solarCenterX, solarCenterY, (int) radius))
+                .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
+    }
+
+    private List<TextureReference> createTextureReferences(Material baseMaterial, Material secondaryMaterial, Landmass landmass) {
+        List<TextureReference> layers = new LinkedList<>();
+        layers.add(new TextureReference(PLANET_OUTLINE, Color.BLACK));
+        layers.add(new TextureReference(PLANET_BASE, baseMaterial.getColor()));
+        layers.add(new TextureReference(landmass.getFileName(), secondaryMaterial.getColor()));
+        layers.add(new TextureReference(PLANET_SHADOW, SHADOW_COLOUR));
+        return layers;
     }
 
     private boolean shouldBeDeathStar() {
         return GameJam.randomSeed.getRandomGenerator().nextInt(101) == 100;
     }
 
-    public <T extends Enum<?>> T randomEnum(Class<T> clazz){
+    public <T extends Enum<?>> T randomEnum(Class<T> clazz) {
         int x = GameJam.randomSeed.getRandomGenerator().nextInt(clazz.getEnumConstants().length);
         return clazz.getEnumConstants()[x];
     }
-
 }
