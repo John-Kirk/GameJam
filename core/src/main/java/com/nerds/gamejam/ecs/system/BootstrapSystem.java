@@ -50,13 +50,13 @@ public class BootstrapSystem extends BaseSystem {
         float scale = (float) GameJam.PLANET_VIEW_HEIGHT / Monster.HEIGHT;
 
         this.world.createEntity().edit()
-                .add(new MonsterComponent())
-                .add(new PositionComponent(-150, 0))
-                .add(new VelocityComponent(0, 0))
-                .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
-                .add(new ScaleComponent(scale, scale))
-                .add(new AnimationComponent(animRef))
-                .add(InMotionComponent.INSTANCE);
+            .add(new MonsterComponent())
+            .add(new PositionComponent(-150, 0))
+            .add(new VelocityComponent(0, 0))
+            .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
+            .add(new ScaleComponent(scale, scale))
+            .add(new AnimationComponent(animRef))
+            .add(InMotionComponent.INSTANCE);
     }
 
     @Override
