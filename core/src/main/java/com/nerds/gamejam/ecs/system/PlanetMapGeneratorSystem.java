@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.AnimationComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
-import com.nerds.gamejam.ecs.component.RenderableComponent;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.util.TextureRegionFactory;
 
@@ -55,15 +54,6 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
         this.world.createEntity().edit().add(new PositionComponent(solarCenterX - ANIMATED_TEXTURE_SIZE/2, solarCenterY - ANIMATED_TEXTURE_SIZE/2))
                 .add(new AnimationComponent(sunTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
                 .add(RenderableComponent.INSTANCE);
-    }
-
-    private void createBackgroundAnimationObjects() {
-        this.world.createEntity().edit().add(new PositionComponent(20, 300))
-              .add(new AnimationComponent(nebulaTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
-              .add(RenderableComponent.INSTANCE);
-        this.world.createEntity().edit().add(new PositionComponent(125, GameJam.PLANET_VIEW_HEIGHT/4))
-              .add(new AnimationComponent(vortexTextureRegionArray, 0.06f, Animation.PlayMode.LOOP))
-              .add(RenderableComponent.INSTANCE);
     }
 
     @Override
