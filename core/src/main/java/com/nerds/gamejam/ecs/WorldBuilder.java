@@ -31,17 +31,17 @@ public class WorldBuilder {
                 .with(new GroupManager(),
                         new TagManager(),
                         new BootstrapSystem(textureLoader),
+                        inputHandlerSystem,
+                        new AnimationUpdateSystem(textureLoader),
                         new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
                         new BodyUpdateSystem(),
                         new PlanetSelectedSystem(new PositionUtil(camera, viewport)),
                         cameraSystem,
-                        inputHandlerSystem,
-                        new AnimationUpdateSystem(textureLoader),
+                        new ActorSystem(stage),
                         new GameIntroSystem(),
                         new MovementSystem(),
                         new RenderSystem(textureLoader, viewport),
                         new PlanetViewGUISystem(game, menuScreen, stage),
-                        new ActorSystem(stage),
                         new MonsterControlSystem())
                 .build();
 

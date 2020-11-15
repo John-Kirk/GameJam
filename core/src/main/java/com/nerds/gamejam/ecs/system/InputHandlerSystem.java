@@ -4,6 +4,8 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Shape2D;
@@ -78,6 +80,14 @@ public class InputHandlerSystem extends BaseEntitySystem implements InputProcess
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if (InputUtil.INPUT_ALLOWED && Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+            float x = Gdx.input.getDeltaX();
+            float y = Gdx.input.getDeltaY();
+
+            orthographicCamera.translate(-x, y);
+
+            return true;
+        }
         return false;
     }
 
