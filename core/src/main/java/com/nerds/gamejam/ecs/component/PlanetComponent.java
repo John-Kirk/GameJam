@@ -4,42 +4,22 @@ import com.artemis.Component;
 
 public class PlanetComponent extends Component {
 
-    private double orbitAngle;
-    private int orbitalDistance;
-    private double orbitalSpeed;
-    private double nextOrbitalAngle;
+    public double orbitalAngle;
+    public int orbitalDistance;
+    public double orbitalSpeed;
+    public double nextOrbitalAngle;
 
     public PlanetComponent() {
         //keep artemis happy
     }
 
-    public PlanetComponent(double orbitAngle, int orbitalDistance, double orbitalSpeed) {
-        this.orbitAngle = orbitAngle;
+    public PlanetComponent(double orbitalAngle, int orbitalDistance, double orbitalSpeed) {
+        this.orbitalAngle = orbitalAngle;
         this.orbitalDistance = orbitalDistance;
         this.orbitalSpeed = orbitalSpeed;
     }
 
-    public double getOrbitAngle() {
-        return orbitAngle;
-    }
-
-    public void setOrbitAngle(double orbitAngle) {
-        this.orbitAngle = orbitAngle;
-    }
-
-    public int getOrbitalDistance() {
-        return orbitalDistance;
-    }
-
-    public double getOrbitalSpeed() {
-        return orbitalSpeed;
-    }
-
-    public double getNextOrbitalAngle() {
-        return nextOrbitalAngle;
-    }
-
     public void setNextOrbitalAngle() {
-        this.nextOrbitalAngle = orbitAngle + (orbitalSpeed / 3);
+        this.nextOrbitalAngle = orbitalAngle + (orbitalSpeed / 3);
     }
 }
