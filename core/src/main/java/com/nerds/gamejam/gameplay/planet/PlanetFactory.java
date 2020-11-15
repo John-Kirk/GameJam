@@ -12,6 +12,8 @@ import com.nerds.gamejam.util.TextureReference;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.MAX_PLANET_SIZE;
+
 public class PlanetFactory {
 
     private static final String PLANET_OUTLINE = "planet/outline.png";
@@ -42,8 +44,8 @@ public class PlanetFactory {
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
         double orbitalRadius = farRightOrbitX + 24 - solarCenterX; //get sprite width how?
-        int x = solarCenterX + (int) (Math.cos(angle)*orbitalRadius);
-        int y = solarCenterY + (int) (Math.sin(angle)*orbitalRadius);
+        int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * planetScale));
+        int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * planetScale));
 
         double minOrbitalSpeed = 0.2;
         double maxOrbitalSpeed = 1.4;

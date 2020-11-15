@@ -10,7 +10,10 @@ import com.nerds.gamejam.ecs.component.FontComponent;
 import com.nerds.gamejam.ecs.component.InMotionComponent;
 import com.nerds.gamejam.ecs.component.PlanetComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
+import com.nerds.gamejam.ecs.component.ScaleComponent;
 import com.nerds.gamejam.util.InputUtil;
+
+import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.MAX_PLANET_SIZE;
 
 @Wire
 public class OrbitalSystem extends IteratingSystem {
@@ -19,6 +22,7 @@ public class OrbitalSystem extends IteratingSystem {
     private ComponentMapper<PlanetComponent> planetMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<InMotionComponent> inMotionMapper;
+    private ComponentMapper<ScaleComponent> scaleMapper;
 
     public OrbitalSystem() {
         super(Aspect.all(PlanetComponent.class));
@@ -30,6 +34,7 @@ public class OrbitalSystem extends IteratingSystem {
         PlanetComponent planetComponent = planetMapper.get(entityId);
         FontComponent fontComponent = fontMapper.get(entityId);
         InMotionComponent inMotionComponent = inMotionMapper.get(entityId);
+        ScaleComponent scaleComponent = scaleMapper.get(entityId);
 
         if (inMotionComponent == null && InputUtil.isKeyPressed(Input.Keys.N)) {
             world.edit(entityId).add(InMotionComponent.INSTANCE);
@@ -46,8 +51,8 @@ public class OrbitalSystem extends IteratingSystem {
                         + (planetComponent.orbitalSpeed * world.getDelta());
 
                 double orbitalRadius = planetComponent.orbitalDistance + 24 - solarCenterX;
-                int x = solarCenterX + (int) (Math.cos(planetComponent.orbitalAngle) * orbitalRadius);
-                int y = solarCenterY + (int) (Math.sin(planetComponent.orbitalAngle) * orbitalRadius);
+                int x = solarCenterX + (int) ((Math.cos(planetComponent.orbitalAngle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * scaleComponent.x));
+                int y = solarCenterY + (int) ((Math.sin(planetComponent.orbitalAngle) * orbitalRadius) - (MAX_PLANET_SIZE / 2 * scaleComponent.y));
                 positionComponent.x = x;
                 positionComponent.y = y;
                 fontComponent.x = x - 10;

@@ -17,7 +17,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
 
     private final PlanetFactory planetFactory;
     private final CachingTextureLoader textureLoader;
-    private static final int MAX_PLANET_SIZE = 24;
+    public static final int MAX_PLANET_SIZE = 24;
     private static final Texture nebula = new Texture("animation/12_nebula_spritesheet.png");
     private static final Texture vortex = new Texture("animation/13_vortex_spritesheet.png");
     private static final Texture sun = new Texture("animation/16_sunburn_spritesheet.png");
