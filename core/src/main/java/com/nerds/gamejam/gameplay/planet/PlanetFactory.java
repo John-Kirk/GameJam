@@ -48,6 +48,9 @@ public class PlanetFactory {
         double minOrbitalSpeed = 0.2;
         double maxOrbitalSpeed = 1.4;
         double orbitalSpeed = minOrbitalSpeed + GameJam.randomSeed.getRandomGenerator().nextDouble() * (maxOrbitalSpeed - minOrbitalSpeed);
+        if (GameJam.randomSeed.getRandomGenerator().nextBoolean()) {
+            orbitalSpeed = orbitalSpeed * -1;
+        }
 
         Entity worldEntity = world.createEntity();
         worldEntity.edit()

@@ -4,6 +4,7 @@ import com.artemis.Component;
 
 public class PlanetComponent extends Component {
 
+    public boolean orbitalDirection;
     public double orbitalAngle;
     public int orbitalDistance;
     public double orbitalSpeed;
@@ -17,6 +18,8 @@ public class PlanetComponent extends Component {
         this.orbitalAngle = orbitalAngle;
         this.orbitalDistance = orbitalDistance;
         this.orbitalSpeed = orbitalSpeed;
+        this.orbitalDirection = orbitalSpeed > 0;
+        this.nextOrbitalAngle = orbitalAngle;
     }
 
     public void setNextOrbitalAngle() {

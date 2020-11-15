@@ -35,7 +35,9 @@ public class OrbitalSystem extends IteratingSystem {
             world.edit(entityId).add(InMotionComponent.INSTANCE);
             planetComponent.setNextOrbitalAngle();
         } else {
-            if (planetComponent.orbitalAngle >= planetComponent.nextOrbitalAngle) {
+            if (planetComponent.orbitalDirection && planetComponent.orbitalAngle >= planetComponent.nextOrbitalAngle) {
+                world.edit(entityId).remove(InMotionComponent.INSTANCE);
+            } else if (!planetComponent.orbitalDirection && planetComponent.orbitalAngle <= planetComponent.nextOrbitalAngle) {
                 world.edit(entityId).remove(InMotionComponent.INSTANCE);
             } else {
                 int solarCenterX = GameJam.PLANET_VIEW_WIDTH / 2;
