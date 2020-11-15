@@ -5,7 +5,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Shape2D;
 import com.nerds.gamejam.ecs.component.BodyComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 
@@ -23,12 +22,15 @@ public class BodyUpdateSystem extends IteratingSystem {
         PositionComponent positionComponent = positionComponentComponentMapper.get(entityId);
         BodyComponent bodyComponent = bodyComponentComponentMapper.get(entityId);
 
-        Shape2D body = bodyComponent.getBody();
-        if (body instanceof Circle) {
-            ((Circle) body).setX(positionComponent.x + ((Circle) body).radius);
-            ((Circle) body).setY(positionComponent.y + ((Circle) body).radius);
-       } else if (body instanceof Rectangle) {
-            ((Rectangle) body).setPosition(positionComponent.x, positionComponent.y);
+        if (bodyComponent.physicalBody != null) {
+            if (bodyComponent.physicalBody instanceof Circle) {
+                Circle circle = (Circle) bodyComponent.physicalBody;
+                circle.setX(positionComponent.x + circle.radius);
+                circle.setY(positionComponent.y + circle.radius);
+            } else if (bodyComponent.physicalBody instanceof Rectangle) {
+                Rectangle rectangle = (Rectangle) bodyComponent.physicalBody;
+                rectangle.setPosition(positionComponent.x, positionComponent.y);
+            }
         }
     }
 }

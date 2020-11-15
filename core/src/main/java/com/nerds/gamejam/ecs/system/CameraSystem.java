@@ -13,11 +13,15 @@ public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
 
+    public CameraSystem(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false);
         this.camera.zoom = 1;
+        this.camera.position.add(camera.viewportWidth * -2f, camera.viewportHeight / -2f, 0);
     }
 
     protected void resize(int width, int height) {

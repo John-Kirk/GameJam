@@ -30,30 +30,22 @@ public class RenderSystem extends BaseEntitySystem {
     private ComponentMapper<FontComponent> fontMapper;
     private final CachingTextureLoader textureLoader;
     private CameraSystem cameraSystem;
-    private ExtendViewport scalingViewport;
+    private ExtendViewport viewport;
     private Batch batch;
     private BitmapFont font;
     private Map<Integer, Array<Integer>> layerMap;
 
-    public RenderSystem(CachingTextureLoader textureLoader) {
+    public RenderSystem(CachingTextureLoader textureLoader, ExtendViewport viewport) {
         super(Aspect.all(PositionComponent.class, TextureReferenceComponent.class, BodyComponent.class));
         this.textureLoader = textureLoader;
         this.layerMap = new HashMap<>();
+        this.viewport = viewport;
     }
 
     @Override
     protected void initialize() {
         this.batch = new SpriteBatch();
         this.font = new BitmapFont();
-
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        float worldWidth = GameJam.PLANET_VIEW_HEIGHT * w / h;
-        int worldHeight = GameJam.PLANET_VIEW_HEIGHT;
-        scalingViewport = new ExtendViewport(worldWidth, worldHeight, cameraSystem.camera);
-        scalingViewport.update((int)w, (int)h);
-        scalingViewport.apply();
-        cameraSystem.camera.position.add(worldWidth * -2f, worldHeight / -2f, 0);
     }
 
     @Override
@@ -88,7 +80,7 @@ public class RenderSystem extends BaseEntitySystem {
 
     @Override
     protected void processSystem() {
-        scalingViewport.apply();
+        viewport.apply();
 
         layerMap.keySet().stream().sorted(Integer::compareTo).forEach(i -> {
             layerMap.get(i).forEach(e -> {
@@ -125,8 +117,8 @@ public class RenderSystem extends BaseEntitySystem {
     }
 
     public void resize(int width, int height) {
-        scalingViewport.update(width, height);
-        scalingViewport.apply();
+        viewport.update(width, height);
+        viewport.apply();
         cameraSystem.resize(width, height);
     }
 

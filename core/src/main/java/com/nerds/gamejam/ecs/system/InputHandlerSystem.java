@@ -6,20 +6,17 @@ import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector3;
 import com.nerds.gamejam.ecs.component.BodyComponent;
 import com.nerds.gamejam.ecs.component.ClickableComponent;
-import com.nerds.gamejam.ecs.component.PositionComponent;
 
 public class InputHandlerSystem extends BaseEntitySystem implements InputProcessor {
 
-    private final OrthographicCamera orthographicCamera;
     private ComponentMapper<BodyComponent> bodyComponentComponentMapper;
     private ComponentMapper<ClickableComponent> clickableComponentMapper;
+
+    private final OrthographicCamera orthographicCamera;
 
     public InputHandlerSystem(OrthographicCamera orthographicCamera) {
         super(Aspect.all(BodyComponent.class, ClickableComponent.class));
@@ -64,7 +61,7 @@ public class InputHandlerSystem extends BaseEntitySystem implements InputProcess
             BodyComponent bodyComponent = bodyComponentComponentMapper.get(entityId);
             ClickableComponent clickableComponent = clickableComponentMapper.get(entityId);
 
-            Shape2D body = bodyComponent.getBody();
+            Shape2D body = bodyComponent.physicalBody;
 
             if (body.contains(worldX, worldY)) {
                 if (clickableComponent.getClickable().onClick(worldX, worldY, screenX, screenY, button)) {

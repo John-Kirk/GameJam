@@ -3,6 +3,7 @@ package com.nerds.gamejam.gameplay.planet;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Circle;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
 import com.nerds.gamejam.util.TextureReference;
@@ -37,14 +38,27 @@ public class PlanetFactory {
 
         float planetScale = GameJam.randomSeed.getRandomGenerator().nextFloat() + 0.5f;
         List<TextureReference> layers = createTextureReferences(baseMaterial, secondaryMaterial, landmass);
+        BodyComponent body = new BodyComponent(24, 24);
+        float radius = body.width / 2 * planetScale;
+        body.physicalBody = new Circle(x + radius, y + radius, radius);
 
         Entity worldEntity = world.createEntity();
+        String planetName = nameFactory.generatePlanetName();
+
+        Material finalBaseMaterial = baseMaterial;
+        Material finalSecondaryMaterial = secondaryMaterial;
+        Landmass finalLandmass = landmass;
         worldEntity.edit()
                 .add(new PositionComponent(x, y))
-                .add(new BodyComponent(24, 24))
+                .add(body)
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
-                .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
+                .add(new FontComponent(planetName, x - 10, y - 10))
+                .add(new ClickableComponent((worldX, worldY, screenX, screenY, button) -> {
+                    String desc = "A " + finalBaseMaterial.getDisplayName() + " planet, covered in " + finalSecondaryMaterial.getDisplayName() + " " + finalLandmass.getDisplayName() + " formations";
+                    worldEntity.edit().add(new SelectedPlanet(planetName, x, y, radius, desc));
+                    return true;
+                }));
     }
 
     private List<TextureReference> createTextureReferences(Material baseMaterial, Material secondaryMaterial, Landmass landmass) {
