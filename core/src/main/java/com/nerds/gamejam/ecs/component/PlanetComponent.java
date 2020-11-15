@@ -1,22 +1,19 @@
 package com.nerds.gamejam.ecs.component;
 
 import com.artemis.Component;
-import com.nerds.gamejam.gameplay.planet.Landmass;
 
-public class LandmassComponent extends Component {
+public class PlanetComponent extends Component {
 
-    public Landmass landmass;
     private double orbitAngle;
     private int orbitalDistance;
     private double orbitalSpeed;
     private double nextOrbitalAngle;
 
-    public LandmassComponent() {
+    public PlanetComponent() {
         //keep artemis happy
     }
 
-    public LandmassComponent(Landmass landmass, double orbitAngle, int orbitalDistance, double orbitalSpeed) {
-        this.landmass = landmass;
+    public PlanetComponent(double orbitAngle, int orbitalDistance, double orbitalSpeed) {
         this.orbitAngle = orbitAngle;
         this.orbitalDistance = orbitalDistance;
         this.orbitalSpeed = orbitalSpeed;

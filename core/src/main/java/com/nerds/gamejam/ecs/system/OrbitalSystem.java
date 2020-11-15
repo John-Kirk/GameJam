@@ -8,7 +8,7 @@ import com.badlogic.gdx.Input;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.FontComponent;
 import com.nerds.gamejam.ecs.component.InMotionComponent;
-import com.nerds.gamejam.ecs.component.LandmassComponent;
+import com.nerds.gamejam.ecs.component.PlanetComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.util.InputUtil;
 
@@ -16,36 +16,36 @@ import com.nerds.gamejam.util.InputUtil;
 public class OrbitalSystem extends IteratingSystem {
 
     private ComponentMapper<PositionComponent> positionMapper;
-    private ComponentMapper<LandmassComponent> landmassMapper;
+    private ComponentMapper<PlanetComponent> landmassMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<InMotionComponent> inMotionMapper;
 
     public OrbitalSystem() {
-        super(Aspect.all(LandmassComponent.class));
+        super(Aspect.all(PlanetComponent.class));
     }
 
     @Override
     protected void process(int entityId) {
         PositionComponent positionComponent = positionMapper.get(entityId);
-        LandmassComponent landmassComponent = landmassMapper.get(entityId);
+        PlanetComponent planetComponent = landmassMapper.get(entityId);
         FontComponent fontComponent = fontMapper.get(entityId);
         InMotionComponent inMotionComponent = inMotionMapper.get(entityId);
 
         if (inMotionComponent == null && InputUtil.isKeyPressed(Input.Keys.N)) {
             world.edit(entityId).add(InMotionComponent.INSTANCE);
-            landmassComponent.setNextOrbitalAngle();
+            planetComponent.setNextOrbitalAngle();
         } else {
-            if (landmassComponent.getOrbitAngle() >= landmassComponent.getNextOrbitalAngle()) {
+            if (planetComponent.getOrbitAngle() >= planetComponent.getNextOrbitalAngle()) {
                 world.edit(entityId).remove(InMotionComponent.INSTANCE);
             } else {
                 int solarCenterX = GameJam.PLANET_VIEW_WIDTH / 2;
                 int solarCenterY = GameJam.PLANET_VIEW_HEIGHT / 2;
-                landmassComponent.setOrbitAngle(landmassComponent.getOrbitAngle()
-                        + (landmassComponent.getOrbitalSpeed() * world.getDelta()));
+                planetComponent.setOrbitAngle(planetComponent.getOrbitAngle()
+                        + (planetComponent.getOrbitalSpeed() * world.getDelta()));
 
-                double radius = landmassComponent.getOrbitalDistance() + 24 - solarCenterX;
-                int x = solarCenterX + (int) (Math.cos(landmassComponent.getOrbitAngle()) * radius);
-                int y = solarCenterY + (int) (Math.sin(landmassComponent.getOrbitAngle()) * radius);
+                double radius = planetComponent.getOrbitalDistance() + 24 - solarCenterX;
+                int x = solarCenterX + (int) (Math.cos(planetComponent.getOrbitAngle()) * radius);
+                int y = solarCenterY + (int) (Math.sin(planetComponent.getOrbitAngle()) * radius);
                 positionComponent.x = x;
                 positionComponent.y = y;
                 fontComponent.x = x - 10;
