@@ -45,12 +45,13 @@ public class OrbitalSystem extends IteratingSystem {
             } else if (!planetComponent.orbitalDirection && planetComponent.orbitalAngle <= planetComponent.nextOrbitalAngle) {
                 world.edit(entityId).remove(InMotionComponent.INSTANCE);
             } else {
-                int solarCenterX = GameJam.PLANET_VIEW_WIDTH / 2;
-                int solarCenterY = GameJam.PLANET_VIEW_HEIGHT / 2;
                 planetComponent.orbitalAngle = planetComponent.orbitalAngle + (planetComponent.orbitalSpeed * world.getDelta());
 
-                int x = solarCenterX + (int) ((Math.cos(planetComponent.orbitalAngle) * planetComponent.orbitalDistance) - (PLANET_SPIRTE_SIZE / 2 * scaleComponent.x));
-                int y = solarCenterY + (int) ((Math.sin(planetComponent.orbitalAngle) * planetComponent.orbitalDistance) - (PLANET_SPIRTE_SIZE / 2 * scaleComponent.y));
+                int x = GameJam.orbitalCalculations.getPlanetXPosition(
+                        planetComponent.orbitalAngle, planetComponent.orbitalDistance, scaleComponent.x);
+                int y = GameJam.orbitalCalculations.getPlanetYPosition(
+                        planetComponent.orbitalAngle, planetComponent.orbitalDistance, scaleComponent.y);
+
                 positionComponent.x = x;
                 positionComponent.y = y;
                 fontComponent.x = x - 10;
