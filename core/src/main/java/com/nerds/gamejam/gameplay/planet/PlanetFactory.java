@@ -22,7 +22,7 @@ public class PlanetFactory {
     private static final Color SHADOW_COLOUR = new Color(0, 0, 0, 0.3f);
     private final PlanetNameFactory nameFactory = new PlanetNameFactory();
 
-    public void createPlanet(World world, int farRightOrbitX, int solarCenterX, int solarCenterY) {        Material baseMaterial = randomEnum(Material.class);
+    public void createPlanet(World world, int orbitalRadius, int solarCenterX, int solarCenterY) {        Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
             secondaryMaterial = randomEnum(Material.class);
@@ -43,7 +43,6 @@ public class PlanetFactory {
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        double orbitalRadius = farRightOrbitX + PLANET_SPIRTE_SIZE - solarCenterX;
         int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
         int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
 
@@ -61,7 +60,7 @@ public class PlanetFactory {
                 .add(new PlanetComponent(angle, farRightOrbitX, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
-                .add(new CircleComponent(solarCenterX, solarCenterY, (int) orbitalRadius))
+                .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))
                 .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
     }
 
