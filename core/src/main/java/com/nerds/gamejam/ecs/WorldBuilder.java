@@ -19,7 +19,7 @@ public class WorldBuilder {
                 .with(new GroupManager(),
                         new TagManager(),
                         new BootstrapSystem(textureLoader),
-                        new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
+                        new PlanetMapGeneratorSystem(new PlanetFactory(), textureLoader),
                         cameraSystem,
                         new AnimationUpdateSystem(textureLoader),
                         new GameIntroSystem(),

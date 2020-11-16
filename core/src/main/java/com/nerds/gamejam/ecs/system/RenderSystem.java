@@ -10,9 +10,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.ecs.component.CircleComponent;
 import com.nerds.gamejam.ecs.component.*;
 import com.nerds.gamejam.util.CachingTextureLoader;
 import com.nerds.gamejam.util.TextureReference;
@@ -28,12 +30,14 @@ public class RenderSystem extends BaseEntitySystem {
     private ComponentMapper<ScaleComponent> scaleMapper;
     private ComponentMapper<BodyComponent> bodyMapper;
     private ComponentMapper<FontComponent> fontMapper;
+    private ComponentMapper<CircleComponent> circleMapper;
     private final CachingTextureLoader textureLoader;
     private CameraSystem cameraSystem;
     private ExtendViewport scalingViewport;
     private Batch batch;
     private BitmapFont font;
     private Map<Integer, Array<Integer>> layerMap;
+    private ShapeRenderer circleRenderer;
 
     public RenderSystem(CachingTextureLoader textureLoader) {
         super(Aspect.all(PositionComponent.class, TextureReferenceComponent.class, BodyComponent.class));
@@ -45,6 +49,7 @@ public class RenderSystem extends BaseEntitySystem {
     protected void initialize() {
         this.batch = new SpriteBatch();
         this.font = new BitmapFont();
+        this.circleRenderer = new ShapeRenderer();
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -60,6 +65,8 @@ public class RenderSystem extends BaseEntitySystem {
     protected void begin() {
         this.batch.setProjectionMatrix(cameraSystem.camera.combined);
         this.batch.begin();
+        this.circleRenderer.setProjectionMatrix(cameraSystem.camera.combined);
+        this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
     }
 
     @Override
@@ -107,6 +114,7 @@ public class RenderSystem extends BaseEntitySystem {
                 }
 
                 drawFont(e);
+                drawCircle(e);
             });
         });
     }
@@ -119,9 +127,18 @@ public class RenderSystem extends BaseEntitySystem {
         }
     }
 
+    private void drawCircle(int e) {
+        CircleComponent circleComponent = this.circleMapper.get(e);
+        if (circleComponent != null) {
+            this.circleRenderer.setColor(Color.WHITE);
+            this.circleRenderer.circle(circleComponent.x , circleComponent.y, circleComponent.radius);
+        }
+    }
+
     @Override
     protected void end() {
         this.batch.end();
+        this.circleRenderer.end();
     }
 
     public void resize(int width, int height) {
@@ -132,7 +149,8 @@ public class RenderSystem extends BaseEntitySystem {
 
     @Override
     protected void dispose() {
-       this.batch.dispose();
-       this.font.dispose();
+        this.batch.dispose();
+        this.circleRenderer.dispose();
+        this.font.dispose();
     }
 }
