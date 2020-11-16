@@ -21,8 +21,4 @@ public class PlanetComponent extends Component {
         this.orbitalDirection = orbitalSpeed > 0;
         this.nextOrbitalAngle = orbitalAngle;
     }
-
-    public void setNextOrbitalAngle() {
-        this.nextOrbitalAngle = orbitalAngle + (orbitalSpeed / 3);
-    }
 }
