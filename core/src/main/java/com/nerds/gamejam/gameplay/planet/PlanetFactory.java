@@ -57,7 +57,7 @@ public class PlanetFactory {
         worldEntity.edit()
                 .add(new PositionComponent(x, y))
                 .add(new BodyComponent(PLANET_SPIRTE_SIZE, PLANET_SPIRTE_SIZE))
-                .add(new PlanetComponent(angle, farRightOrbitX, orbitalSpeed))
+                .add(new PlanetComponent(angle, orbitalRadius, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
                 .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))
