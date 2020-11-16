@@ -33,7 +33,7 @@ public class WorldBuilder {
                         new BootstrapSystem(textureLoader),
                         inputHandlerSystem,
                         new AnimationUpdateSystem(textureLoader),
-                        new PlanetMapGeneratorSystem(new PlanetFactory(), 64),
+                        new PlanetMapGeneratorSystem(new PlanetFactory(), textureLoader),
                         new BodyUpdateSystem(),
                         new PlanetSelectedSystem(new PositionUtil(camera, viewport)),
                         cameraSystem,

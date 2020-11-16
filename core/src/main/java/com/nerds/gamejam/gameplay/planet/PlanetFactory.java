@@ -5,11 +5,14 @@ import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Circle;
 import com.nerds.gamejam.GameJam;
+import com.nerds.gamejam.ecs.component.CircleComponent;
 import com.nerds.gamejam.ecs.component.*;
 import com.nerds.gamejam.util.TextureReference;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.PLANET_SPIRTE_SIZE;
 
 public class PlanetFactory {
 
@@ -19,7 +22,7 @@ public class PlanetFactory {
     private static final Color SHADOW_COLOUR = new Color(0, 0, 0, 0.3f);
     private final PlanetNameFactory nameFactory = new PlanetNameFactory();
 
-    public void createPlanet(World world, int x, int y) {
+    public void createPlanet(World world, int orbitalRadius, int solarCenterX, int solarCenterY) {
         Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
@@ -42,6 +45,11 @@ public class PlanetFactory {
         float radius = body.width / 2 * planetScale;
         body.physicalBody = new Circle(x + radius, y + radius, radius);
 
+        // Set planet's initial position to a random location somewhere on its orbit
+        double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
+        int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
+        int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
+
         Entity worldEntity = world.createEntity();
         String planetName = nameFactory.generatePlanetName();
 
@@ -53,6 +61,7 @@ public class PlanetFactory {
                 .add(body)
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
+                .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))
                 .add(new FontComponent(planetName, x - 10, y - 10))
                 .add(new ClickableComponent((worldX, worldY, screenX, screenY, button) -> {
                     String desc = String.format(GameJam.gameStrings.get("planetDescription"), GameJam.gameStrings.get(finalBaseMaterial.name().toLowerCase()), GameJam.gameStrings.get(finalLandmass.name().toLowerCase()), GameJam.gameStrings.get(finalSecondaryMaterial.name().toLowerCase()));
