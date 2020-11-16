@@ -41,14 +41,15 @@ public class PlanetFactory {
 
         float planetScale = GameJam.randomSeed.getRandomGenerator().nextFloat() + 0.5f;
         List<TextureReference> layers = createTextureReferences(baseMaterial, secondaryMaterial, landmass);
-        BodyComponent body = new BodyComponent(24, 24);
-        float radius = body.width / 2 * planetScale;
-        body.physicalBody = new Circle(x + radius, y + radius, radius);
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
         int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
         int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
+
+        BodyComponent body = new BodyComponent(24, 24);
+        float radius = body.width / 2 * planetScale;
+        body.physicalBody = new Circle(x + radius, y + radius, radius);
 
         Entity worldEntity = world.createEntity();
         String planetName = nameFactory.generatePlanetName();
