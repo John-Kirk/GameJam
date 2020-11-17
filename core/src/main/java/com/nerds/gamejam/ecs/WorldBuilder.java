@@ -10,6 +10,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.system.*;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
@@ -38,7 +40,7 @@ public class WorldBuilder {
                         new PlanetSelectedSystem(new PositionUtil(camera, viewport)),
                         cameraSystem,
                         new ActorSystem(stage),
-                        new GameIntroSystem(),
+//                        new GameIntroSystem(),
                         new MovementSystem(),
                         new RenderSystem(textureLoader, viewport),
                         new PlanetViewGUISystem(game, menuScreen, stage),

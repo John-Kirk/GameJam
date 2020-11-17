@@ -15,7 +15,7 @@ public class RandomSeed {
     }
 
     private void seedNewRandom(long seed) {
-        random = new Random(seed);
+        random = new Random(123);
     }
 
     public Random getRandomGenerator() {

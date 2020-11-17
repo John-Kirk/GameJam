@@ -19,5 +19,4 @@ public class PositionUtil {
         Vector3 project = viewport.project(new Vector3(vector2.x, vector2.y, 0));
         return new Vector2(project.x, project.y);
     }
-
 }

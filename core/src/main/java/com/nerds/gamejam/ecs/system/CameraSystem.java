@@ -29,7 +29,7 @@ public class CameraSystem extends BaseSystem {
     }
 
     private void setCameraBounds() {
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.3f, 1f);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.05f, 1f);
         float zoomedViewportWidth = camera.viewportWidth * camera.zoom;
         float zoomedViewportHeight = camera.viewportHeight * camera.zoom;
         float halfViewWidth = zoomedViewportWidth / 2f;

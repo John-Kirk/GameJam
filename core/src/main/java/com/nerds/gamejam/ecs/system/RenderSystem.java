@@ -39,6 +39,8 @@ public class RenderSystem extends BaseEntitySystem {
     private Map<Integer, Array<Integer>> layerMap;
     private ShapeRenderer circleRenderer;
 
+    public boolean renderFont = true;
+
     public RenderSystem(CachingTextureLoader textureLoader, ExtendViewport viewport) {
         super(Aspect.all(PositionComponent.class, TextureReferenceComponent.class, BodyComponent.class));
         this.textureLoader = textureLoader;
@@ -105,7 +107,10 @@ public class RenderSystem extends BaseEntitySystem {
                     batch.draw(toDraw, position.x, position.y, width, height);
                 }
 
-                drawFont(e);
+                if (renderFont) {
+                    drawFont(e);
+                }
+
                 drawCircle(e);
             });
         });
