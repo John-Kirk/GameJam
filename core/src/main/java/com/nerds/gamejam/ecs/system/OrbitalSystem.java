@@ -16,12 +16,12 @@ import com.nerds.gamejam.util.OrbitalCalculations;
 @Wire
 public class OrbitalSystem extends IteratingSystem {
 
-    private final OrbitalCalculations orbitalCalculations;
     private ComponentMapper<PositionComponent> positionMapper;
     private ComponentMapper<PlanetComponent> planetMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<InMotionComponent> inMotionMapper;
     private ComponentMapper<ScaleComponent> scaleMapper;
+    private final OrbitalCalculations orbitalCalculations;
 
     public OrbitalSystem(OrbitalCalculations orbitalCalculations) {
         super(Aspect.all(PlanetComponent.class));
