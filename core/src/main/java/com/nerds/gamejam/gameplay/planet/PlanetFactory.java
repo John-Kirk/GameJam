@@ -66,8 +66,12 @@ public class PlanetFactory {
                 .add(new PlanetComponent(angle, orbitalRadius, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
-                .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))
+                .add(new LayerComponent(LayerComponent.PLANETS))
                 .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
+        Entity orbitalOutline = world.createEntity();
+        orbitalOutline.edit()
+                .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))
+                .add(new LayerComponent(LayerComponent.ORBIT_MARKERS));
     }
 
     private List<TextureReference> createTextureReferences(Material baseMaterial, Material secondaryMaterial, Landmass landmass) {

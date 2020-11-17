@@ -13,8 +13,6 @@ import com.nerds.gamejam.util.TextureReference;
 import com.nerds.gamejam.gameplay.character.Monster;
 import com.nerds.gamejam.util.TextureRegionFactory;
 
-import static com.nerds.gamejam.ecs.component.TextureReferenceComponent.BACKGROUND;
-
 public class BootstrapSystem extends BaseSystem {
 
     private static final Texture MONSTER_TEXTURE = new Texture("animation/monster_spritesheet.png");
@@ -34,12 +32,12 @@ public class BootstrapSystem extends BaseSystem {
         TextureReference textureReference = new TextureReference("stars.png", Color.WHITE);
         textureReference.setTextureWrap(Texture.TextureWrap.Repeat);
         TextureReferenceComponent textureReferenceComponent = new TextureReferenceComponent(textureReference);
-        textureReferenceComponent.layer = BACKGROUND;
         this.world.createEntity().edit()
                 .add(new PositionComponent(0, 0))
                 .add(new BodyComponent(800, 600))
                 .add(new ScaleComponent(3.5f, 3.5f))
-                .add(textureReferenceComponent);
+                .add(textureReferenceComponent)
+                .add(new LayerComponent(LayerComponent.BACKGROUND));
                 addMonster();
     }
 
@@ -56,6 +54,7 @@ public class BootstrapSystem extends BaseSystem {
             .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
             .add(new ScaleComponent(scale, scale))
             .add(new AnimationComponent(animRef))
+            .add(new LayerComponent(LayerComponent.MONSTER))
             .add(InMotionComponent.INSTANCE);
     }
 

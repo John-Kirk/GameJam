@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.AnimationComponent;
 import com.nerds.gamejam.ecs.component.BodyComponent;
+import com.nerds.gamejam.ecs.component.LayerComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.util.CachingTextureLoader;
@@ -55,7 +56,8 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
 
         this.world.createEntity().edit().add(new PositionComponent(solarCenterX - ANIMATED_TEXTURE_SIZE/2, solarCenterY - ANIMATED_TEXTURE_SIZE/2))
             .add(new AnimationComponent(animationReference))
-            .add(new BodyComponent(ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE));
+            .add(new BodyComponent(ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE))
+            .add(new LayerComponent(LayerComponent.PLANETS));
     }
 
     @Override

@@ -31,16 +31,17 @@ public class RenderSystem extends BaseEntitySystem {
     private ComponentMapper<BodyComponent> bodyMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<CircleComponent> circleMapper;
+    private ComponentMapper<LayerComponent> layerMapper;
     private final CachingTextureLoader textureLoader;
     private CameraSystem cameraSystem;
     private ExtendViewport scalingViewport;
     private Batch batch;
     private BitmapFont font;
-    private Map<Integer, Array<Integer>> layerMap;
+    private final Map<Integer, Array<Integer>> layerMap;
     private ShapeRenderer circleRenderer;
 
     public RenderSystem(CachingTextureLoader textureLoader) {
-        super(Aspect.all(PositionComponent.class, TextureReferenceComponent.class, BodyComponent.class));
+        super(Aspect.one(TextureReferenceComponent.class, AnimationComponent.class, CircleComponent.class));
         this.textureLoader = textureLoader;
         this.layerMap = new HashMap<>();
     }
@@ -64,30 +65,28 @@ public class RenderSystem extends BaseEntitySystem {
     @Override
     protected void begin() {
         this.batch.setProjectionMatrix(cameraSystem.camera.combined);
-        this.batch.begin();
         this.circleRenderer.setProjectionMatrix(cameraSystem.camera.combined);
-        this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
     }
 
     @Override
     protected void inserted(int entityId) {
-        TextureReferenceComponent textureReferenceComponent = textureReferenceMapper.get(entityId);
+        LayerComponent layerComponent = layerMapper.get(entityId);
         System.out.println("Adding entity " + entityId);
 
-        if (layerMap.get(textureReferenceComponent.layer) != null) {
-            Array<Integer> entityIds = layerMap.get(textureReferenceComponent.layer);
+        if (layerMap.get(layerComponent.layer) != null) {
+            Array<Integer> entityIds = layerMap.get(layerComponent.layer);
             entityIds.add(entityId);
         } else {
             Array<Integer> entityIds = new Array<>();
             entityIds.add(entityId);
-            layerMap.put(textureReferenceComponent.layer, entityIds);
+            layerMap.put(layerComponent.layer, entityIds);
         }
     }
 
     @Override
     protected void removed(int entityId) {
-        TextureReferenceComponent textureReferenceComponent = textureReferenceMapper.get(entityId);
-        if (layerMap.containsKey(textureReferenceComponent.layer)) {
+        LayerComponent layerComponent = layerMapper.get(entityId);
+        if (layerMap.containsKey(layerComponent.layer)) {
             Array<Integer> entityIds = layerMap.get(entityId);
             entityIds.removeValue(entityId, true);
         }
@@ -98,24 +97,36 @@ public class RenderSystem extends BaseEntitySystem {
         scalingViewport.apply();
 
         layerMap.keySet().stream().sorted(Integer::compareTo).forEach(i -> {
-            layerMap.get(i).forEach(e -> {
-                PositionComponent position = positionMapper.get(e);
-                TextureReferenceComponent textureReference = textureReferenceMapper.get(e);
-                BodyComponent bodyComponent = bodyMapper.get(e);
-                ScaleComponent scaleComponent = scaleMapper.get(e);
+            if (circleMapper.get(layerMap.get(i).get(0)) != null) {
+                layerMap.get(i).forEach(e -> {
+                    this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
+                    drawCircle(e);
+                    this.circleRenderer.end();
+                });
 
-                float width = scaleComponent!= null ? bodyComponent.width * scaleComponent.x : bodyComponent.width;
-                float height = scaleComponent != null ? bodyComponent.height * scaleComponent.y : bodyComponent.height;
+            } else {
+                layerMap.get(i).forEach(e -> {
+                    PositionComponent position = positionMapper.get(e);
+                    TextureReferenceComponent textureReference = textureReferenceMapper.get(e);
+                    BodyComponent bodyComponent = bodyMapper.get(e);
+                    ScaleComponent scaleComponent = scaleMapper.get(e);
 
-                for (TextureReference reference : textureReference.references) {
-                    TextureRegion toDraw = textureLoader.getTexture(reference);
-                    batch.setColor(reference.getColor());
-                    batch.draw(toDraw, position.x, position.y, width, height);
-                }
+                    if (position != null && bodyComponent != null) {
+                        float width = scaleComponent != null ? bodyComponent.width * scaleComponent.x : bodyComponent.width;
+                        float height = scaleComponent != null ? bodyComponent.height * scaleComponent.y : bodyComponent.height;
 
-                drawFont(e);
-                drawCircle(e);
-            });
+                        batch.begin();
+                        for (TextureReference reference : textureReference.references) {
+                            TextureRegion toDraw = textureLoader.getTexture(reference);
+                            batch.setColor(reference.getColor());
+                            batch.draw(toDraw, position.x, position.y, width, height);
+                        }
+
+                        drawFont(e);
+                        batch.end();
+                    }
+                });
+            }
         });
     }
 
@@ -130,15 +141,9 @@ public class RenderSystem extends BaseEntitySystem {
     private void drawCircle(int e) {
         CircleComponent circleComponent = this.circleMapper.get(e);
         if (circleComponent != null) {
-            this.circleRenderer.setColor(Color.WHITE);
+            this.circleRenderer.setColor(Color.LIGHT_GRAY);
             this.circleRenderer.circle(circleComponent.x , circleComponent.y, circleComponent.radius);
         }
-    }
-
-    @Override
-    protected void end() {
-        this.batch.end();
-        this.circleRenderer.end();
     }
 
     public void resize(int width, int height) {
