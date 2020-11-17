@@ -64,9 +64,7 @@ public class RenderSystem extends BaseEntitySystem {
     @Override
     protected void begin() {
         this.batch.setProjectionMatrix(cameraSystem.camera.combined);
-        this.batch.begin();
         this.circleRenderer.setProjectionMatrix(cameraSystem.camera.combined);
-        this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
     }
 
     @Override
@@ -104,9 +102,15 @@ public class RenderSystem extends BaseEntitySystem {
                 BodyComponent bodyComponent = bodyMapper.get(e);
                 ScaleComponent scaleComponent = scaleMapper.get(e);
 
+                this.circleRenderer.begin(ShapeRenderer.ShapeType.Line);
+                drawCircle(e);
+                this.circleRenderer.end();
+
+
                 float width = scaleComponent!= null ? bodyComponent.width * scaleComponent.x : bodyComponent.width;
                 float height = scaleComponent != null ? bodyComponent.height * scaleComponent.y : bodyComponent.height;
 
+                this.batch.begin();
                 for (TextureReference reference : textureReference.references) {
                     TextureRegion toDraw = textureLoader.getTexture(reference);
                     batch.setColor(reference.getColor());
@@ -114,7 +118,7 @@ public class RenderSystem extends BaseEntitySystem {
                 }
 
                 drawFont(e);
-                drawCircle(e);
+                this.batch.end();
             });
         });
     }
@@ -137,8 +141,7 @@ public class RenderSystem extends BaseEntitySystem {
 
     @Override
     protected void end() {
-        this.batch.end();
-        this.circleRenderer.end();
+
     }
 
     public void resize(int width, int height) {
