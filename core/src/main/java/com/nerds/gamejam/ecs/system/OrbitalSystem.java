@@ -5,27 +5,27 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Input;
-import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.FontComponent;
 import com.nerds.gamejam.ecs.component.InMotionComponent;
 import com.nerds.gamejam.ecs.component.PlanetComponent;
 import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.ScaleComponent;
 import com.nerds.gamejam.util.InputUtil;
-
-import static com.nerds.gamejam.ecs.system.PlanetMapGeneratorSystem.PLANET_SPIRTE_SIZE;
+import com.nerds.gamejam.util.OrbitalCalculations;
 
 @Wire
 public class OrbitalSystem extends IteratingSystem {
 
+    private final OrbitalCalculations orbitalCalculations;
     private ComponentMapper<PositionComponent> positionMapper;
     private ComponentMapper<PlanetComponent> planetMapper;
     private ComponentMapper<FontComponent> fontMapper;
     private ComponentMapper<InMotionComponent> inMotionMapper;
     private ComponentMapper<ScaleComponent> scaleMapper;
 
-    public OrbitalSystem() {
+    public OrbitalSystem(OrbitalCalculations orbitalCalculations) {
         super(Aspect.all(PlanetComponent.class));
+        this.orbitalCalculations = orbitalCalculations;
     }
 
     @Override
@@ -47,9 +47,9 @@ public class OrbitalSystem extends IteratingSystem {
             } else {
                 planetComponent.orbitalAngle = planetComponent.orbitalAngle + (planetComponent.orbitalSpeed * world.getDelta());
 
-                int x = GameJam.orbitalCalculations.getPlanetXPosition(
+                int x = orbitalCalculations.getPlanetXPosition(
                         planetComponent.orbitalAngle, planetComponent.orbitalDistance, scaleComponent.x);
-                int y = GameJam.orbitalCalculations.getPlanetYPosition(
+                int y = orbitalCalculations.getPlanetYPosition(
                         planetComponent.orbitalAngle, planetComponent.orbitalDistance, scaleComponent.y);
 
                 positionComponent.x = x;

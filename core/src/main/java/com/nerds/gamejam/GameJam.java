@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.nerds.gamejam.screen.StartScreen;
 import com.nerds.gamejam.translation.GameStrings;
 import com.nerds.gamejam.util.CachingTextureLoader;
-import com.nerds.gamejam.util.OrbitalCalculations;
 import com.nerds.gamejam.util.RandomSeed;
 
 public class GameJam extends Game {
@@ -16,7 +15,6 @@ public class GameJam extends Game {
 	public static final int PLANET_VIEW_HEIGHT = 1000;
 	public static RandomSeed randomSeed;
 	public static GameStrings gameStrings;
-	public static OrbitalCalculations orbitalCalculations;
 	public static Skin skin;
 	private CachingTextureLoader cachingTextureLoader;
 
@@ -24,7 +22,6 @@ public class GameJam extends Game {
 	public void create () {
 		randomSeed = new RandomSeed();
 		gameStrings = new GameStrings();
-		orbitalCalculations = new OrbitalCalculations();
 		skin = new Skin(Gdx.files.getFileHandle("testskin/assets/uiskin.json", Files.FileType.Internal));
 		cachingTextureLoader = new CachingTextureLoader();
 		setScreen(new StartScreen(this, cachingTextureLoader));

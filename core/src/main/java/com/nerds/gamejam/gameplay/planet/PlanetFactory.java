@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.CircleComponent;
 import com.nerds.gamejam.ecs.component.*;
+import com.nerds.gamejam.util.OrbitalCalculations;
 import com.nerds.gamejam.util.TextureReference;
 
 
@@ -21,6 +22,11 @@ public class PlanetFactory {
     private static final String PLANET_SHADOW = "planet/shadow.png";
     private static final Color SHADOW_COLOUR = new Color(0, 0, 0, 0.3f);
     private final PlanetNameFactory nameFactory = new PlanetNameFactory();
+    private final OrbitalCalculations orbitalCalculations;
+
+    public PlanetFactory(OrbitalCalculations orbitalCalculations) {
+        this.orbitalCalculations = orbitalCalculations;
+    }
 
     public void createPlanet(World world, int orbitalRadius, int solarCenterX, int solarCenterY) {        Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
@@ -43,8 +49,8 @@ public class PlanetFactory {
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        int x = GameJam.orbitalCalculations.getPlanetXPosition(angle, orbitalRadius, planetScale);
-        int y = GameJam.orbitalCalculations.getPlanetYPosition(angle, orbitalRadius, planetScale);
+        int x = orbitalCalculations.getPlanetXPosition(angle, orbitalRadius, planetScale);
+        int y = orbitalCalculations.getPlanetYPosition(angle, orbitalRadius, planetScale);
 
         double minOrbitalSpeed = 0.2;
         double maxOrbitalSpeed = 1.4;
