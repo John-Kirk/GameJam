@@ -1,5 +1,7 @@
 package com.nerds.gamejam.util;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.Random;
 
 public class RandomSeed {
@@ -11,7 +13,9 @@ public class RandomSeed {
     }
 
     public void regenerateSeed() {
-        seedNewRandom(new Random().nextLong());
+        long newSeed = new Random().nextLong();
+        Gdx.app.log("RandomSeed", String.valueOf(newSeed));
+        seedNewRandom(newSeed);
     }
 
     private void seedNewRandom(long seed) {

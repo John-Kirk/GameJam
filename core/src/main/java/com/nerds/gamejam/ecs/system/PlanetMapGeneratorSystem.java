@@ -39,7 +39,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
     private void createSolarSystem() {
         int solarCenterX = GameJam.PLANET_VIEW_WIDTH / 2;
         int solarCenterY = GameJam.PLANET_VIEW_HEIGHT / 2;
-        int orbitalDistance = 50;
+        int orbitalDistance = 90;
         do {
             planetFactory.createPlanet(this.world, orbitalDistance, solarCenterX, solarCenterY);
             int xDistFromPrevious = GameJam.randomSeed.getRandomGenerator().nextInt(75) + 30;

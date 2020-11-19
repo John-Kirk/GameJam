@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Circle;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.CircleComponent;
 import com.nerds.gamejam.ecs.component.*;
+import com.nerds.gamejam.util.OrbitalCalculations;
 import com.nerds.gamejam.util.TextureReference;
 
 import java.util.LinkedList;
@@ -21,6 +22,11 @@ public class PlanetFactory {
     private static final String PLANET_SHADOW = "planet/shadow.png";
     private static final Color SHADOW_COLOUR = new Color(0, 0, 0, 0.3f);
     private final PlanetNameFactory nameFactory = new PlanetNameFactory();
+    private final OrbitalCalculations orbitalCalculations;
+
+    public PlanetFactory(OrbitalCalculations orbitalCalculations) {
+        this.orbitalCalculations = orbitalCalculations;
+    }
 
     public void createPlanet(World world, int orbitalRadius, int solarCenterX, int solarCenterY) {
         Material baseMaterial = randomEnum(Material.class);
@@ -44,8 +50,15 @@ public class PlanetFactory {
 
         // Set planet's initial position to a random location somewhere on its orbit
         double angle = GameJam.randomSeed.getRandomGenerator().nextDouble() * Math.PI * 2;
-        int x = solarCenterX + (int) ((Math.cos(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
-        int y = solarCenterY + (int) ((Math.sin(angle) * orbitalRadius) - (PLANET_SPIRTE_SIZE / 2 * planetScale));
+        int x = orbitalCalculations.getPlanetXPosition(angle, orbitalRadius, planetScale);
+        int y = orbitalCalculations.getPlanetYPosition(angle, orbitalRadius, planetScale);
+
+        double minOrbitalSpeed = 0.2;
+        double maxOrbitalSpeed = 1.4;
+        double orbitalSpeed = minOrbitalSpeed + GameJam.randomSeed.getRandomGenerator().nextDouble() * (maxOrbitalSpeed - minOrbitalSpeed);
+        if (GameJam.randomSeed.getRandomGenerator().nextBoolean()) {
+            orbitalSpeed = orbitalSpeed * -1;
+        }
 
         BodyComponent body = new BodyComponent(24, 24);
         float radius = body.width / 2 * planetScale;
@@ -60,6 +73,7 @@ public class PlanetFactory {
         worldEntity.edit()
                 .add(new PositionComponent(x, y))
                 .add(body)
+                .add(new PlanetComponent(angle, orbitalRadius, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
                 .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))

@@ -17,11 +17,14 @@ import com.nerds.gamejam.ecs.system.*;
 import com.nerds.gamejam.gameplay.planet.PlanetFactory;
 import com.nerds.gamejam.screen.MenuScreen;
 import com.nerds.gamejam.util.CachingTextureLoader;
+import com.nerds.gamejam.util.OrbitalCalculations;
 import com.nerds.gamejam.util.PositionUtil;
 
 public class WorldBuilder {
 
     public static World build(GameJam game, MenuScreen menuScreen, CachingTextureLoader textureLoader) {
+        CameraSystem cameraSystem = new CameraSystem();
+        OrbitalCalculations orbitalCalculations = new OrbitalCalculations();
         Stage stage = new Stage();
         OrthographicCamera camera = new OrthographicCamera();
         ExtendViewport viewport = createViewport(camera);
@@ -35,16 +38,17 @@ public class WorldBuilder {
                         new BootstrapSystem(textureLoader),
                         inputHandlerSystem,
                         new AnimationUpdateSystem(textureLoader),
-                        new PlanetMapGeneratorSystem(new PlanetFactory(), textureLoader),
+                        new PlanetMapGeneratorSystem(new PlanetFactory(orbitalCalculations), textureLoader),
                         new BodyUpdateSystem(),
                         new PlanetSelectedSystem(new PositionUtil(camera, viewport)),
                         cameraSystem,
                         new ActorSystem(stage),
-//                        new GameIntroSystem(),
+                        new GameIntroSystem(),
                         new MovementSystem(),
                         new RenderSystem(textureLoader, viewport),
                         new PlanetViewGUISystem(game, menuScreen, stage),
-                        new MonsterControlSystem())
+                        new MonsterControlSystem()),
+                        new OrbitalSystem(orbitalCalculations))
                 .build();
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
