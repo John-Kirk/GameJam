@@ -51,7 +51,7 @@ public class BootstrapSystem extends BaseSystem {
 
         this.world.createEntity().edit()
             .add(new MonsterComponent())
-            .add(new PositionComponent(-150, 0))
+            .add(new PositionComponent((int) Math.ceil(Monster.WIDTH * scale * -1), 0))
             .add(new VelocityComponent(0, 0))
             .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
             .add(new ScaleComponent(scale, scale))

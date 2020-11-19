@@ -24,8 +24,4 @@ public enum Material {
     public Color getColor() {
         return color;
     }
-
-    public String getDisplayName() {
-        return toString().toLowerCase().replace("_", " ");
-    }
 }

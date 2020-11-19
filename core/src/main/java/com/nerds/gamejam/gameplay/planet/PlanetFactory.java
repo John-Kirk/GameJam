@@ -60,7 +60,7 @@ public class PlanetFactory {
             orbitalSpeed = orbitalSpeed * -1;
         }
 
-        BodyComponent body = new BodyComponent(24, 24);
+        BodyComponent body = new BodyComponent(PLANET_SPIRTE_SIZE, PLANET_SPIRTE_SIZE);
         float radius = body.width / 2 * planetScale;
         body.physicalBody = new Circle(x + radius, y + radius, radius);
 

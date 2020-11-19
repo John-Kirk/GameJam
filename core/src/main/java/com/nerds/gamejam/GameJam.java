@@ -11,8 +11,8 @@ import com.nerds.gamejam.util.RandomSeed;
 
 public class GameJam extends Game {
 
-	public static final int PLANET_VIEW_WIDTH = 2880;
-	public static final int PLANET_VIEW_HEIGHT = 1620;
+	public static final int PLANET_VIEW_WIDTH = 1800;
+	public static final int PLANET_VIEW_HEIGHT = 1000;
 	public static RandomSeed randomSeed;
 	public static GameStrings gameStrings;
 	public static Skin skin;

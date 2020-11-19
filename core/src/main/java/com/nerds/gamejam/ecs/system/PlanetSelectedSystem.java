@@ -79,7 +79,6 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
             table.remove();
         }
 
-
         table = new Table();
         table.add().fill().expand();
         table.add().fill().expand();
