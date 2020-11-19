@@ -23,11 +23,10 @@ import com.nerds.gamejam.util.PositionUtil;
 public class WorldBuilder {
 
     public static World build(GameJam game, MenuScreen menuScreen, CachingTextureLoader textureLoader) {
-        CameraSystem cameraSystem = new CameraSystem();
-        OrbitalCalculations orbitalCalculations = new OrbitalCalculations();
         Stage stage = new Stage();
         OrthographicCamera camera = new OrthographicCamera();
         ExtendViewport viewport = createViewport(camera);
+        OrbitalCalculations orbitalCalculations = new OrbitalCalculations();
 
         CameraSystem cameraSystem = new CameraSystem(camera);
         InputHandlerSystem inputHandlerSystem = new InputHandlerSystem(camera);
@@ -47,7 +46,7 @@ public class WorldBuilder {
                         new MovementSystem(),
                         new RenderSystem(textureLoader, viewport),
                         new PlanetViewGUISystem(game, menuScreen, stage),
-                        new MonsterControlSystem()),
+                        new MonsterControlSystem(),
                         new OrbitalSystem(orbitalCalculations))
                 .build();
 
