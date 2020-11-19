@@ -38,7 +38,7 @@ public class BootstrapSystem extends BaseSystem {
         this.world.createEntity().edit()
                 .add(new PositionComponent(0, 0))
                 .add(new BodyComponent(800, 600))
-                .add(new ScaleComponent(3.5f, 3.5f))
+                .add(new ScaleComponent(GameJam.PLANET_VIEW_WIDTH / 800f, GameJam.PLANET_VIEW_HEIGHT / 600f))
                 .add(textureReferenceComponent);
                 addMonster();
     }
