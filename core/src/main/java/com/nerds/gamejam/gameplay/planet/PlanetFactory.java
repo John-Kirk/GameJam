@@ -3,12 +3,12 @@ package com.nerds.gamejam.gameplay.planet;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Circle;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.CircleComponent;
 import com.nerds.gamejam.ecs.component.*;
 import com.nerds.gamejam.util.OrbitalCalculations;
 import com.nerds.gamejam.util.TextureReference;
-
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +28,8 @@ public class PlanetFactory {
         this.orbitalCalculations = orbitalCalculations;
     }
 
-    public void createPlanet(World world, int orbitalRadius, int solarCenterX, int solarCenterY) {        Material baseMaterial = randomEnum(Material.class);
+    public void createPlanet(World world, int orbitalRadius, int solarCenterX, int solarCenterY) {
+        Material baseMaterial = randomEnum(Material.class);
         Material secondaryMaterial = null;
         while (secondaryMaterial == null || secondaryMaterial == baseMaterial) {
             secondaryMaterial = randomEnum(Material.class);
@@ -59,15 +60,29 @@ public class PlanetFactory {
             orbitalSpeed = orbitalSpeed * -1;
         }
 
+        BodyComponent body = new BodyComponent(PLANET_SPIRTE_SIZE, PLANET_SPIRTE_SIZE);
+        float radius = body.width / 2 * planetScale;
+        body.physicalBody = new Circle(x + radius, y + radius, radius);
+
         Entity worldEntity = world.createEntity();
+        String planetName = nameFactory.generatePlanetName();
+
+        Material finalBaseMaterial = baseMaterial;
+        Material finalSecondaryMaterial = secondaryMaterial;
+        Landmass finalLandmass = landmass;
         worldEntity.edit()
                 .add(new PositionComponent(x, y))
-                .add(new BodyComponent(PLANET_SPIRTE_SIZE, PLANET_SPIRTE_SIZE))
+                .add(body)
                 .add(new PlanetComponent(angle, orbitalRadius, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
                 .add(new ScaleComponent(planetScale, planetScale))
                 .add(new CircleComponent(solarCenterX, solarCenterY, orbitalRadius))
-                .add(new FontComponent(nameFactory.generatePlanetName(), x - 10, y - 10));
+                .add(new FontComponent(planetName, x - 10, y - 10))
+                .add(new ClickableComponent((worldX, worldY, screenX, screenY, button) -> {
+                    String desc = String.format(GameJam.gameStrings.get("planetDescription"), GameJam.gameStrings.get(finalBaseMaterial.name().toLowerCase()), GameJam.gameStrings.get(finalLandmass.name().toLowerCase()), GameJam.gameStrings.get(finalSecondaryMaterial.name().toLowerCase()));
+                    worldEntity.edit().add(new SelectedPlanet(planetName, x, y, radius, desc));
+                    return true;
+                }));
     }
 
     private List<TextureReference> createTextureReferences(Material baseMaterial, Material secondaryMaterial, Landmass landmass) {

@@ -1,7 +1,7 @@
 package com.nerds.gamejam.gameplay.character;
 
+import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.LibGdxTest;
-import com.nerds.gamejam.translation.GameStrings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ public class CharacterTest extends LibGdxTest {
 
     @BeforeEach
     public void setUp() {
-        character = new Character(new GameStrings());
+        character = new Character(GameJam.gameStrings);
         character.setTotalHp(10);
     }
 

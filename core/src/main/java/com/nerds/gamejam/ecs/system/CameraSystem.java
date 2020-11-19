@@ -13,11 +13,15 @@ public class CameraSystem extends BaseSystem {
 
     OrthographicCamera camera;
 
+    public CameraSystem(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
     @Override
     protected void initialize() {
-        this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false);
         this.camera.zoom = 1;
+        this.camera.position.add(camera.viewportWidth * -2f, camera.viewportHeight / -2f, 0);
     }
 
     protected void resize(int width, int height) {
@@ -25,7 +29,7 @@ public class CameraSystem extends BaseSystem {
     }
 
     private void setCameraBounds() {
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.3f, 1f);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.05f, 1f);
         float zoomedViewportWidth = camera.viewportWidth * camera.zoom;
         float zoomedViewportHeight = camera.viewportHeight * camera.zoom;
         float halfViewWidth = zoomedViewportWidth / 2f;
