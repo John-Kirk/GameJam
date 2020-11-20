@@ -70,8 +70,9 @@ public class PlanetFactory {
         Material finalBaseMaterial = baseMaterial;
         Material finalSecondaryMaterial = secondaryMaterial;
         Landmass finalLandmass = landmass;
+        PositionComponent positionComponent = new PositionComponent(x, y);
         worldEntity.edit()
-                .add(new PositionComponent(x, y))
+                .add(positionComponent)
                 .add(body)
                 .add(new PlanetComponent(angle, orbitalRadius, orbitalSpeed))
                 .add(new TextureReferenceComponent(layers))
@@ -80,7 +81,7 @@ public class PlanetFactory {
                 .add(new FontComponent(planetName, x - 10, y - 10))
                 .add(new ClickableComponent((worldX, worldY, screenX, screenY, button) -> {
                     String desc = String.format(GameJam.gameStrings.get("planetDescription"), GameJam.gameStrings.get(finalBaseMaterial.name().toLowerCase()), GameJam.gameStrings.get(finalLandmass.name().toLowerCase()), GameJam.gameStrings.get(finalSecondaryMaterial.name().toLowerCase()));
-                    worldEntity.edit().add(new SelectedPlanet(planetName, x, y, radius, desc));
+                    worldEntity.edit().add(new SelectedPlanet(planetName, positionComponent.x, positionComponent.y, radius, desc));
                     return true;
                 }));
     }
