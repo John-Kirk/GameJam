@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.ActorComponent;
+import com.nerds.gamejam.ecs.component.PositionComponent;
 import com.nerds.gamejam.ecs.component.SelectedPlanet;
 import com.nerds.gamejam.util.InputUtil;
 import com.nerds.gamejam.util.PositionUtil;
@@ -27,6 +28,7 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
 
     public static final float ZOOM_DURATION = 1.5f;
     private ComponentMapper<SelectedPlanet> selectedPlanetComponentMapper;
+    private ComponentMapper<PositionComponent> positionComponentMapper;
     private CameraSystem cameraSystem;
     private RenderSystem renderSystem;
 
@@ -38,7 +40,7 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
     private float cameraYOrigin;
 
     public PlanetSelectedSystem(PositionUtil positionUtil) {
-        super(Aspect.all(SelectedPlanet.class));
+        super(Aspect.all(SelectedPlanet.class, PositionComponent.class));
         this.positionUtil = positionUtil;
     }
 
@@ -48,13 +50,14 @@ public class PlanetSelectedSystem extends BaseEntitySystem {
         if (bag.size() > 0) {
             int entityId = bag.get(0);
             SelectedPlanet selectedPlanet = selectedPlanetComponentMapper.get(entityId);
+            PositionComponent positionComponent = positionComponentMapper.get(entityId);
 
             if (timeToZoom >= 0){
                 timeToZoom -= this.world.getDelta();
                 float progress = timeToZoom < 0 ? 1 : 1f - timeToZoom / ZOOM_DURATION;
                 cameraSystem.camera.zoom = Interpolation.linear.apply(cameraZoomOrigin, 0, progress);
-                cameraSystem.camera.position.x = Interpolation.exp10Out.apply(cameraXOrigin, selectedPlanet.x + selectedPlanet.radius * 2, progress);
-                cameraSystem.camera.position.y = Interpolation.exp10Out.apply(cameraYOrigin, selectedPlanet.y + selectedPlanet.radius, progress);
+                cameraSystem.camera.position.x = Interpolation.exp10Out.apply(cameraXOrigin, positionComponent.x + selectedPlanet.radius * 2, progress);
+                cameraSystem.camera.position.y = Interpolation.exp10Out.apply(cameraYOrigin, positionComponent.y + selectedPlanet.radius, progress);
             }
 
             cameraSystem.camera.update();
