@@ -14,6 +14,10 @@ public class TextureReference {
         this.color = color;
     }
 
+    public TextureReference(String reference) {
+        this(reference, Color.WHITE);
+    }
+
     public String getReference() {
         return reference;
     }
