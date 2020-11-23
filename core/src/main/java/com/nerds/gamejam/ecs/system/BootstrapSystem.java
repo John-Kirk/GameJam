@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.GameJam;
 import com.nerds.gamejam.ecs.component.*;
@@ -20,7 +22,10 @@ import com.nerds.gamejam.util.TextureReference;
 import com.nerds.gamejam.gameplay.character.Monster;
 import com.nerds.gamejam.util.TextureRegionFactory;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.nerds.gamejam.ecs.component.TextureReferenceComponent.BACKGROUND;
 
@@ -88,10 +93,28 @@ public class BootstrapSystem extends BaseSystem {
             .add(new PositionComponent(800, 600))
             .add(body)
             .add(new ClickableComponent((worldX, worldY, screenX, screenY, button) -> {
+
+                Array<DialogComponent> dialogs = new Array<>();
+
+                for (int i = 0; i < 3; i++) {
+                    dialogs.add(createDialog(crewMembers, createRandomSpeech(i)));
+                }
+
+                Stack stack = new Stack();
+                Image actor = new Image(textureLoader.getTexture(new TextureReference("ships/planetship.png")));
+                actor.setSize(300, 300);
+                stack.add(actor);
+
+                SceneComponent sceneComponent = new SceneComponent(dialogs, new ActorComponent(stack));
+
                 this.world.createEntity().edit()
-                    .add(new SpeechBubbleComponent(crewMembers.get(GameJam.randomSeed.getRandomGenerator().nextInt(crewMembers.size())), createRandomSpeech()));
+                    .add(sceneComponent);
                 return true;
             }));
+    }
+
+    private DialogComponent createDialog(List<CrewMember> crewMembers, Array<String> lines) {
+        return new DialogComponent(crewMembers.get(GameJam.randomSeed.getRandomGenerator().nextInt(crewMembers.size())), lines);
     }
 
     private StatBlock createRandomStatBlock() {
@@ -105,10 +128,10 @@ public class BootstrapSystem extends BaseSystem {
         return new StatBlock(stats);
     }
 
-    private Array<String> createRandomSpeech() {
+    private Array<String> createRandomSpeech(int i) {
         Array<String> speech = new Array<>();
 
-        speech.add("Hello world!");
+        speech.add("Hello world! " + i);
         speech.add("I'm a test speech...");
         speech.add("but I bet my dialogue is so great you couldn't even tell!");
         speech.add("Anyhoo, I have to be going now...");

@@ -31,12 +31,7 @@ public class PlanetMapGeneratorSystem extends BaseSystem {
         this.sunTextureRegionArray = TextureRegionFactory.createTextureRegionArray(sun, ANIMATED_TEXTURE_SIZE, ANIMATED_TEXTURE_SIZE, 38);
     }
 
-    @Override
-    protected void initialize() {
-        createSolarSystem();
-    }
-
-    private void createSolarSystem() {
+    public void createSolarSystem() {
         int solarCenterX = GameJam.PLANET_VIEW_WIDTH / 2;
         int solarCenterY = GameJam.PLANET_VIEW_HEIGHT / 2;
         int orbitalDistance = 90;

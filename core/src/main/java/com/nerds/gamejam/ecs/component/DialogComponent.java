@@ -5,16 +5,16 @@ import com.badlogic.gdx.utils.Array;
 import com.nerds.gamejam.gameplay.character.CrewMember;
 
 
-public class SpeechBubbleComponent extends Component {
+public class DialogComponent extends Component {
 
     public CrewMember speaker;
     public Array<String> lines;
 
-    public SpeechBubbleComponent(CrewMember speaker, Array<String> lines) {
+    public DialogComponent(CrewMember speaker, Array<String> lines) {
         this.speaker = speaker;
         this.lines = lines;
     }
 
-    public SpeechBubbleComponent() {
+    public DialogComponent() {
     }
 }
