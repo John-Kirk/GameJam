@@ -31,6 +31,8 @@ import static com.nerds.gamejam.ecs.component.TextureReferenceComponent.BACKGROU
 
 public class BootstrapSystem extends BaseSystem {
 
+    public String monsterAnimReference;
+
     private static final Texture MONSTER_TEXTURE = new Texture("animation/monster_spritesheet.png");
     private Array<TextureRegion> monsterTextureRegionArray;
 
@@ -60,18 +62,18 @@ public class BootstrapSystem extends BaseSystem {
 
     private void addMonster() {
         Animation<TextureRegion> anim = new Animation<>(0.35f, monsterTextureRegionArray, Animation.PlayMode.LOOP);
-        String animRef = textureLoader.cacheAnimation(anim);
-
-        float scale = (float) GameJam.PLANET_VIEW_HEIGHT / Monster.HEIGHT;
-
-        this.world.createEntity().edit()
-            .add(new MonsterComponent())
-            .add(new PositionComponent((int) Math.ceil(Monster.WIDTH * scale * -1), 0))
-            .add(new VelocityComponent(0, 0))
-            .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
-            .add(new ScaleComponent(scale, scale))
-            .add(new AnimationComponent(animRef))
-            .add(InMotionComponent.INSTANCE);
+        monsterAnimReference = textureLoader.cacheAnimation(anim);
+//
+//        float scale = (float) GameJam.PLANET_VIEW_HEIGHT / Monster.HEIGHT;
+//
+//        this.world.createEntity().edit()
+//            .add(new MonsterComponent())
+//            .add(new PositionComponent((int) Math.ceil(Monster.WIDTH * scale * -1), 0))
+//            .add(new VelocityComponent(0, 0))
+//            .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
+//            .add(new ScaleComponent(scale, scale))
+//            .add(new AnimationComponent(monsterAnimReference))
+//            .add(InMotionComponent.INSTANCE);
     }
 
     private void createShip() {
@@ -105,7 +107,7 @@ public class BootstrapSystem extends BaseSystem {
                 actor.setSize(300, 300);
                 stack.add(actor);
 
-                SceneComponent sceneComponent = new SceneComponent(dialogs, new ActorComponent(stack));
+                SceneComponent sceneComponent = new SceneComponent(dialogs, new ActorComponent(stack), () -> {});
 
                 this.world.createEntity().edit()
                     .add(sceneComponent);

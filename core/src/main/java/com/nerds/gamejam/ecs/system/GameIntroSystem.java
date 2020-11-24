@@ -4,6 +4,9 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
@@ -14,6 +17,7 @@ import com.nerds.gamejam.gameplay.character.Monster;
 import com.nerds.gamejam.util.CachingTextureLoader;
 import com.nerds.gamejam.util.InputUtil;
 import com.nerds.gamejam.util.TextureReference;
+import com.nerds.gamejam.util.TextureRegionFactory;
 
 @Wire
 public class GameIntroSystem extends IteratingSystem {
@@ -21,6 +25,7 @@ public class GameIntroSystem extends IteratingSystem {
     private final CachingTextureLoader textureLoader;
     private CameraSystem cameraSystem;
     private PlanetMapGeneratorSystem planetMapGeneratorSystem;
+    private BootstrapSystem bootstrapSystem;
     private ComponentMapper<MonsterComponent> monsterMapper;
     private ComponentMapper<VelocityComponent> velocityMapper;
     private ComponentMapper<PositionComponent> positionMapper;
@@ -28,7 +33,6 @@ public class GameIntroSystem extends IteratingSystem {
     private ComponentMapper<ShipComponent> shipComponentComponentMapper;
     private boolean cameraCurrentlyZooming = true;
     private Array<SceneComponent> sceneComponents;
-    public SceneComponent currentScene;
 
     public GameIntroSystem(CachingTextureLoader textureLoader) {
         super(Aspect.all(ShipComponent.class));
@@ -37,16 +41,6 @@ public class GameIntroSystem extends IteratingSystem {
 
     @Override
     protected void process(int e) {
-        if (currentScene == null && sceneComponents != null && sceneComponents.size > 0) {
-            SceneComponent component = sceneComponents.removeIndex(0);
-            world.createEntity().edit().add(component);
-            this.currentScene = component;
-        }
-
-        if (this.currentScene == null && sceneComponents.size == 0) {
-            planetMapGeneratorSystem.createSolarSystem();
-            this.setEnabled(false);
-        }
     }
 
     @Override
@@ -59,6 +53,13 @@ public class GameIntroSystem extends IteratingSystem {
         sceneComponents.add(createSecondScene(crewMember));
         sceneComponents.add(createThirdScene(crewMember));
         sceneComponents.add(createFourthScene(crewMember));
+
+        advanceScene();
+    }
+
+    private void advanceScene() {
+        SceneComponent component = sceneComponents.removeIndex(0);
+        world.createEntity().edit().add(component);
     }
 
     private SceneComponent createFirstScene(CrewMember crewMember) {
@@ -73,7 +74,10 @@ public class GameIntroSystem extends IteratingSystem {
         Array<DialogComponent> dialogs = new Array<>();
         dialogs.add(dialog1);
 
-        return new SceneComponent(dialogs, new ActorComponent(table));
+        return new SceneComponent(dialogs, new ActorComponent(table), () -> {
+            addMonster();
+            advanceScene();
+        });
     }
 
     private SceneComponent createSecondScene(CrewMember crewMember) {
@@ -89,7 +93,7 @@ public class GameIntroSystem extends IteratingSystem {
         Array<DialogComponent> dialogs = new Array<>();
         dialogs.add(dialog1);
 
-        return new SceneComponent(dialogs, new ActorComponent(table));
+        return new SceneComponent(dialogs, new ActorComponent(table), this::advanceScene);
     }
 
     private SceneComponent createThirdScene(CrewMember crewMember) {
@@ -104,7 +108,7 @@ public class GameIntroSystem extends IteratingSystem {
         Array<DialogComponent> dialogs = new Array<>();
         dialogs.add(dialog1);
 
-        return new SceneComponent(dialogs, new ActorComponent(table));
+        return new SceneComponent(dialogs, new ActorComponent(table), this::advanceScene);
     }
 
     private SceneComponent createFourthScene(CrewMember crewMember) {
@@ -120,15 +124,26 @@ public class GameIntroSystem extends IteratingSystem {
         Array<DialogComponent> dialogs = new Array<>();
         dialogs.add(dialog1);
 
-        return new SceneComponent(dialogs, new ActorComponent(table));
+        return new SceneComponent(dialogs, new ActorComponent(table), () -> {
+            planetMapGeneratorSystem.createSolarSystem();
+            this.setEnabled(false);
+        });
     }
 
-    private void beginMonsterMovement(int e) {
-        MonsterComponent monsterComponent = monsterMapper.get(e);
-        monsterComponent.xPositionGoal = 0;
-        VelocityComponent velocityComponent = velocityMapper.get(e);
-        velocityComponent.velocityX = Monster.SPEED / 10;
-        world.edit(e).add(InMotionComponent.INSTANCE);
-    }
+    private void addMonster() {
+        float scale = (float) GameJam.PLANET_VIEW_HEIGHT / Monster.HEIGHT;
 
+        MonsterComponent monsterComponent = new MonsterComponent();
+        monsterComponent.xPositionGoal = 9999999;
+
+        this.world.createEntity().edit()
+                .add(monsterComponent)
+                .add(new PositionComponent((int) Math.ceil(Monster.WIDTH * scale * -1), 0))
+                .add(new VelocityComponent(Monster.SPEED / 5, 0))
+                .add(new BodyComponent(Monster.WIDTH, Monster.HEIGHT))
+                .add(new ScaleComponent(scale, scale))
+                .add(new AnimationComponent(bootstrapSystem.monsterAnimReference))
+                .add(InMotionComponent.INSTANCE);
+
+    }
 }

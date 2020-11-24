@@ -14,8 +14,6 @@ public class SceneSystem extends IteratingSystem {
     private ComponentMapper<SceneComponent> sceneComponentComponentMapper;
 
     private SpeechSystem speechSystem;
-    private GameIntroSystem gameIntroSystem;
-    private ActorComponent backgroundComponent;
 
     public SceneSystem() {
         super(Aspect.all(SceneComponent.class));
@@ -31,8 +29,7 @@ public class SceneSystem extends IteratingSystem {
             } else {
                 sceneComponent.background.actor.remove();
                 world.delete(entityId);
-                gameIntroSystem.currentScene = null;
-
+                sceneComponent.endOfSceneCallback.execute();
             }
         }
     }
@@ -42,5 +39,9 @@ public class SceneSystem extends IteratingSystem {
         SceneComponent sceneComponent = sceneComponentComponentMapper.get(entityId);
         world.createEntity().edit().add(sceneComponent.background);
         world.createEntity().edit().add(sceneComponent.dialogs.removeIndex(0));
+    }
+
+    public interface EndOfSceneCallback {
+        void execute();
     }
 }
